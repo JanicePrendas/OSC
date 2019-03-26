@@ -6,4 +6,8 @@
     <color name="colorAccent">#ffb357</color>
     <color name="colorAccentDark">#c88327</color>
     <color name="colorAccentLight">#ffe587</color>
+    <color name="white">#ffffff</color>
+    <color name="gray">#aaaaaa</color>
+    <color name="black">#000000</color>
+    <color name="black_marl">#484c54</color>
 </resources>

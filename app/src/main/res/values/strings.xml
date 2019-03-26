@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">OSC</string>
+
+    <!--Strings del Login-->
+    <string name="welcome_app">Bienvenido a Ordene Su Comida</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="signin">Iniciar sesión</string>
+    <string name="o">o</string>
+    <string name="new_here">¿Nuevo en Ordene Su Comida?</string>
+    <string name="signup">Regístrate aquí</string>
 </resources>
