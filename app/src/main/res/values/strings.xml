@@ -10,6 +10,12 @@
     <string name="new_here">¿Nuevo en Ordene Su Comida?</string>
     <string name="signup">Regístrate aquí</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Strings del Registro-->
+    <string name="register">Registrarse</string>
+    <string name="nombre">Nombre</string>
+    <string name="confirmar_contra">Confirmar contraseña</string>
+    <string name="nombre_soda">Nombre de la Soda</string>
+    <string name="direccion">Dirección</string>
+    <string name="num_telefonico">Número Telefónico</string>
+
 </resources>
