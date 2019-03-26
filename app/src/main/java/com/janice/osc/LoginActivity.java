@@ -13,6 +13,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            this.getSupportActionBar().hide(); //Para quitar el ActionBar
+        }
+        catch (NullPointerException e){}
         setContentView(R.layout.activity_login);
         setItems();
         setGoogleButtonText();
