@@ -1,5 +1,7 @@
 package com.janice.osc;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,13 +21,11 @@ import com.janice.osc.Registro.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private SignInButton mGoogleSignInButton;
     private TextView mTvRegistrar;
     private FirebaseAuth mAuth;
     private EditText mEtCorreo;
     private EditText mEtContrasena;
     private Button mBtnIniciarSesion;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setItems(){
-        mGoogleSignInButton = findViewById(R.id.sign_in_button);
         mTvRegistrar = findViewById(R.id.tvRegistrar);
         mEtContrasena = findViewById(R.id.password_edittext);
         mEtCorreo = findViewById(R.id.email_edittext);
