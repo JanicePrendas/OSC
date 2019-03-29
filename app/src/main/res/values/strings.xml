@@ -18,4 +18,7 @@
     <string name="direccion">Dirección</string>
     <string name="num_telefonico">Número Telefónico</string>
 
+    <!--Strings de los Productos-->
+    <string name="plato_del_dia">Plato del Dìa</string>
+
 </resources>

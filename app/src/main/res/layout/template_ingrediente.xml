@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:numberpicker="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imagen"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/fondo"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/nombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Nombre"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/precio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="₡ Precio"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="16sp" />
+
+        <com.travijuu.numberpicker.library.NumberPicker
+            android:id="@+id/number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            numberpicker:min="0"
+            numberpicker:max="10"
+            numberpicker:value="0"
+            numberpicker:focusable="false"
+            numberpicker:custom_layout="@layout/number_picker_custom_layout" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>
