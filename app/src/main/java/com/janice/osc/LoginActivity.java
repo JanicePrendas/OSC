@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.janice.osc.Registro.RegisterActivity;
+import com.janice.osc.Util.Util;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -75,11 +76,11 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Authentication good.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(user);
+                            Util.updateUI(user,LoginActivity.this);
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            Util.updateUI(null,LoginActivity.this);
                         }
                     }
                 });
@@ -89,19 +90,6 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-
-    public void updateUI(FirebaseUser user){
-        if(user!=null){
-            Toast.makeText(this, "Autenticated.",
-                    Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(getApplicationContext(), PanelNavegacion.class);
-//            startActivity(intent);
-        }else{
-            Toast.makeText(this, "Not Autenticated.",
-                    Toast.LENGTH_LONG).show();
-        }
-
+        Util.updateUI(currentUser,LoginActivity.this);
     }
 }

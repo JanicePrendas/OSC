@@ -3,6 +3,7 @@ package com.janice.osc.Registro;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.janice.osc.R;
+import com.janice.osc.Util.Util;
 
 public class RegisterCustomerFragment extends Fragment {
 
@@ -29,6 +31,8 @@ public class RegisterCustomerFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+
+    private AppCompatActivity mActivity;
 
     public RegisterCustomerFragment() {
         // Required empty public constructor
@@ -66,6 +70,7 @@ public class RegisterCustomerFragment extends Fragment {
         mRegister_button = view.findViewById(R.id.register_button);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://osc-app-a1dc6.firebaseio.com/").getReference("usuarios");
+        mActivity = (AppCompatActivity) getActivity();
     }
 
     private boolean validate() {
@@ -76,21 +81,10 @@ public class RegisterCustomerFragment extends Fragment {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        Util.updateUI(currentUser,mActivity);
     }
 
-    public void updateUI(FirebaseUser user){
-        if(user!=null){
-            Toast.makeText(getActivity(), "Autenticated.",
-                    Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(getApplicationContext(), PanelNavegacion.class);
-//            startActivity(intent);
-        }else{
-            Toast.makeText(getActivity(), "Not Autenticated.",
-                    Toast.LENGTH_LONG).show();
-        }
 
-    }
 
     public void registrar() {
         String email =mEmail_edittext.getText().toString();
@@ -105,9 +99,10 @@ public class RegisterCustomerFragment extends Fragment {
                             FirebaseUser user = mAuth.getCurrentUser();
                             DatabaseReference dbusuario = mDatabase.child(user.getUid());
                             dbusuario.child("nombre").setValue(mNombre_edittext.getText().toString());
-                            updateUI(user);
+                            dbusuario.child("tipo").setValue("cliente");
+                            Util.updateUI(user,mActivity);
                         } else {
-                            Toast.makeText(getActivity(), "Authentication failed.",
+                            Toast.makeText(mActivity, "Registration failed.",
                                     Toast.LENGTH_LONG).show();
                         }
 
