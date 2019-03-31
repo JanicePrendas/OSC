@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEtCorreo;
     private EditText mEtContrasena;
     private Button mBtnIniciarSesion;
+    private View mFocusView;
+    private boolean mCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         mBtnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                autenticar();
+                if (validar()) {
+                    autenticar();
+                }
             }
         });
 
@@ -91,5 +96,24 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         Util.updateUI(currentUser,LoginActivity.this);
+    }
+
+
+    public boolean validar(){
+    mCancel = false;
+    mFocusView = null;
+    validate_edittext(mEtCorreo);
+    validate_edittext(mEtContrasena);
+    return !mCancel;
+    }
+    private void validate_edittext(EditText e) {
+        e.setError(null);
+        if (TextUtils.isEmpty(e.getText().toString())) {
+            e.setError("Este campo es requerido");
+            if (!mCancel)
+                mCancel = true;
+            if (mFocusView == null)
+                mFocusView = e;
+        }
     }
 }
