@@ -1,9 +1,12 @@
 package com.janice.osc.Registro;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +31,11 @@ public class RegisterCustomerFragment extends Fragment {
     private EditText mContrasena_edittext;
     private EditText mConfirmar_contrasena_edittext;
     private Button mRegister_button;
-
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-
     private AppCompatActivity mActivity;
+    private View mFocusView;
+    private boolean mCancel;
 
     public RegisterCustomerFragment() {
         // Required empty public constructor
@@ -51,7 +54,7 @@ public class RegisterCustomerFragment extends Fragment {
         return view;
     }
 
-    public void setViewListeners(View view){
+    public void setViewListeners(View view) {
         mRegister_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +65,7 @@ public class RegisterCustomerFragment extends Fragment {
         });
     }
 
-    private void setItems(View view){
+    private void setItems(View view) {
         mNombre_edittext = view.findViewById(R.id.nombre_edittext);
         mEmail_edittext = view.findViewById(R.id.email_edittext);
         mContrasena_edittext = view.findViewById(R.id.contrasena_edittext);
@@ -74,21 +77,27 @@ public class RegisterCustomerFragment extends Fragment {
     }
 
     private boolean validate() {
-        return true;
+        mCancel = false;
+        mFocusView = null;
+        validate_edittext(mNombre_edittext);
+        validate_edittext(mEmail_edittext);
+        validate_edittext(mContrasena_edittext);
+        validate_edittext(mConfirmar_contrasena_edittext);
+        valida_contrasena();
+       return !mCancel;
     }
 
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        Util.updateUI(currentUser,mActivity);
+        Util.updateUI(currentUser, mActivity);
     }
 
 
-
     public void registrar() {
-        String email =mEmail_edittext.getText().toString();
-        String password =mContrasena_edittext.getText().toString();
+        String email = mEmail_edittext.getText().toString();
+        String password = mContrasena_edittext.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -100,9 +109,11 @@ public class RegisterCustomerFragment extends Fragment {
                             DatabaseReference dbusuario = mDatabase.child(user.getUid());
                             dbusuario.child("nombre").setValue(mNombre_edittext.getText().toString());
                             dbusuario.child("tipo").setValue("cliente");
-                            Util.updateUI(user,mActivity);
+                            Util.updateUI(user, mActivity);
                         } else {
-                            Toast.makeText(mActivity, "Registration failed.",
+
+
+                            Toast.makeText(mActivity, "Registration failed.\n" + task.getException(),
                                     Toast.LENGTH_LONG).show();
                         }
 
@@ -112,5 +123,33 @@ public class RegisterCustomerFragment extends Fragment {
     }
 
 
+    private void validate_edittext(EditText e) {
+        e.setError(null);
+        if (TextUtils.isEmpty(e.getText().toString())) {
+            e.setError("Este campo es requerido");
+            if (!mCancel)
+                mCancel = true;
+            if (mFocusView == null)
+                mFocusView = e;
+        }
+    }
 
+    private void valida_contrasena() {
+        if (mContrasena_edittext.getText().toString().length() < 6) {
+            mContrasena_edittext.setError("La contraseña debe contener al menos 6 dígitos");
+            if (!mCancel)
+                mCancel = true;
+            if (mFocusView == null)
+                mFocusView = mContrasena_edittext;
+        } else
+        {
+            if (!mContrasena_edittext.getText().toString().equals(mConfirmar_contrasena_edittext.getText().toString())) {
+                mConfirmar_contrasena_edittext.setError("Las contraseñas no coinciden");
+                if (!mCancel)
+                    mCancel = true;
+                if (mFocusView == null)
+                    mFocusView = mConfirmar_contrasena_edittext;
+            }
+        }
+    }
 }
