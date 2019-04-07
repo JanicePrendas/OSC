@@ -9,8 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Registro.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Soda.AgregarProductoActivity"></activity>
+        <activity
+            android:name=".Customer.HomeCustomer"
+            android:label="@string/title_activity_home_customer" />
+        <activity
+            android:name=".Soda.HomeSoda"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".Registro.RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
