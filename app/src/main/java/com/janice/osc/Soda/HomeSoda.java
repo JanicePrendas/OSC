@@ -18,13 +18,13 @@ public class HomeSoda extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
             switch (item.getItemId()) {
-                case R.id.navigation_home:
+                case R.id.nav_products:
                     selectedFragment = new ProductsFragment();
                     break;
-                case R.id.navigation_dashboard:
+                case R.id.nav_orders:
                     selectedFragment = new OrdersFragment();
                     break;
-                case R.id.navigation_notifications:
+                case R.id.nav_profile_soda:
                     selectedFragment = new ProfileSodaFragment();
                     break;
             }

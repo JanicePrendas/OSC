@@ -12,7 +12,7 @@
         <activity android:name=".Soda.AgregarProductoActivity"></activity>
         <activity
             android:name=".Customer.HomeCustomer"
-            android:label="@string/title_activity_home_customer" />
+            android:label="@string/title_activity_home" />
         <activity
             android:name=".Soda.HomeSoda"
             android:label="@string/title_activity_home" />

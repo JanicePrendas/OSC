@@ -6,7 +6,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.janice.osc.R;
 import com.janice.osc.Soda.OrdersFragment;
@@ -24,11 +23,11 @@ public class HomeCustomer extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_home:
+                case R.id.nav_products:
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.nav_orders:
                     return true;
-                case R.id.navigation_notifications:
+                case R.id.nav_profile_soda:
                     return true;
             }
             return false;

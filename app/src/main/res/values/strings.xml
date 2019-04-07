@@ -1,5 +1,9 @@
 <resources>
+    <!--Strings Generales-->
     <string name="app_name">OSC</string>
+    <string name="ver">Ver</string>
+    <string name="title_activity_home">Inicio</string>
+    <string name="profile">Perfil</string>
 
     <!--Strings del Login-->
     <string name="welcome_app">Bienvenido a \nOrdene Su Comida</string>
@@ -19,15 +23,19 @@
     <string name="num_telefonico">Número Telefónico</string>
 
     <!--Strings de los Productos-->
-    <string name="plato_del_dia">Plato del Dìa</string>
-    <string name="title_activity_home">Home</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_home_customer">HomeCustomer</string>
+    <string name="plato_del_dia">Plato del Día</string>
+    <string name="productos">Productos</string>
+
+    <!--Strings de los Pedidos-->
+    <string name="pedidos">Pedidos</string>
+
+    <!--Strings Soda-->
+    <string name="sodas">Sodas</string>
+
+    <!--Strings Customer-->
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="ver">Ver</string>
+
 
 </resources>
