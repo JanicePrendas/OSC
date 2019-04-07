@@ -5,14 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -36,14 +33,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         try {
             this.getSupportActionBar().hide(); //Para quitar el ActionBar
-        }
-        catch (NullPointerException e){}
+        } catch (NullPointerException e) {}
         setContentView(R.layout.activity_login);
         setItems();
         setViewListeners();
     }
 
-    private void setItems(){
+    private void setItems() {
         mTvRegistrar = findViewById(R.id.tvRegistrar);
         mEtContrasena = findViewById(R.id.password_edittext);
         mEtCorreo = findViewById(R.id.email_edittext);
@@ -51,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    private void setViewListeners(){
+    private void setViewListeners() {
         mBtnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,8 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         mTvRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
+                sendToRegister();
             }
         });
 
@@ -81,11 +76,11 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Authentication good.",
                                     Toast.LENGTH_SHORT).show();
-                            Util.updateUI(user,LoginActivity.this);
+                            Util.updateUI(user, LoginActivity.this); //Para mandar al usuario a su home correspondiente
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            Util.updateUI(null,LoginActivity.this);
+                            Util.updateUI(null, LoginActivity.this);
                         }
                     }
                 });
@@ -95,17 +90,18 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        Util.updateUI(currentUser,LoginActivity.this);
+        Util.updateUI(currentUser, LoginActivity.this);
     }
 
 
-    public boolean validar(){
-    mCancel = false;
-    mFocusView = null;
-    validate_edittext(mEtCorreo);
-    validate_edittext(mEtContrasena);
-    return !mCancel;
+    public boolean validar() {
+        mCancel = false;
+        mFocusView = null;
+        validate_edittext(mEtCorreo);
+        validate_edittext(mEtContrasena);
+        return !mCancel;
     }
+
     private void validate_edittext(EditText e) {
         e.setError(null);
         if (TextUtils.isEmpty(e.getText().toString())) {
@@ -115,5 +111,10 @@ public class LoginActivity extends AppCompatActivity {
             if (mFocusView == null)
                 mFocusView = e;
         }
+    }
+
+    private void sendToRegister(){
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivity(intent);
     }
 }

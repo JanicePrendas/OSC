@@ -18,8 +18,7 @@ public class Util {
 
     public static void updateUI(FirebaseUser user, final AppCompatActivity activity) {
         if (user != null) {
-            Toast.makeText(activity, "Autenticated.",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Autenticated.", Toast.LENGTH_LONG).show();
             String uid = user.getUid();
             DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://osc-app-a1dc6.firebaseio.com/").getReference("usuarios");
             mDatabase.child(uid).child("tipo").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -36,13 +35,10 @@ public class Util {
                 }
 
             @Override
-            public void onCancelled (@NonNull DatabaseError databaseError){
-
-            }
+            public void onCancelled (@NonNull DatabaseError databaseError){}
         });
         } else {
-            Toast.makeText(activity, "Not Autenticated.",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Not Autenticated.", Toast.LENGTH_LONG).show();
         }
     }
 }
