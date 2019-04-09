@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,16 +29,10 @@ public class AgregarProductoActivity extends AppCompatActivity {
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabase;
-
-    private EditText mEtTitulo;
-    private EditText mEtDescripcion;
-    private EditText mEtPrecio;
-    private TextView mTvImagen;
+    private EditText mEtTitulo, mEtDescripcion, mEtPrecio;
     private Button mBtnGuardar;
-    private Button mBtnBuscarImagen;
-
+    private ImageView mAdd_product_imageview;
     private Producto producto;
-
     private Uri uriImagenSeleccionada;
 
 
@@ -54,27 +50,21 @@ public class AgregarProductoActivity extends AppCompatActivity {
     private void setItems() {
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         producto = new Producto();
-
         mEtTitulo = findViewById(R.id.etTitulo);
         mEtDescripcion = findViewById(R.id.etDescripcion);
         mEtPrecio = findViewById(R.id.etPrecio);
-        mTvImagen = findViewById(R.id.tvImagen);
+        mAdd_product_imageview = findViewById(R.id.add_product_imageview);
         mBtnGuardar = findViewById(R.id.btnGuardar);
-        mBtnBuscarImagen = findViewById(R.id.btnBuscarImagen);
     }
 
     private void setViewListeners() {
         mBtnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long precio = Long.parseLong(mEtPrecio.getText().toString());
-                producto.setPrecio(precio);
-                producto.setTitulo(mEtTitulo.getText().toString());
-                producto.setDescripcion(mEtDescripcion.getText().toString());
 
-                if (mTvImagen.getText() == "Imagen seleccionada") {
+                //if (mTvImagen.getText() == "Imagen seleccionada") {
+                if (uriImagenSeleccionada != null) {
                     String img = System.currentTimeMillis() + "." + getFileExtension(uriImagenSeleccionada);
 
                     final StorageReference ref = mStorageRef.child(img);
@@ -92,18 +82,17 @@ public class AgregarProductoActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();
                                 producto.setImg(downloadUri.toString());
-                                guaradarPlato();
+                                validar();
                             }
                         }
                     });
                 } else {
-                    guaradarPlato();
+                    validar();
                 }
-
             }
         });
 
-        mBtnBuscarImagen.setOnClickListener(new View.OnClickListener() {
+        mAdd_product_imageview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFileChooser();
@@ -111,7 +100,12 @@ public class AgregarProductoActivity extends AppCompatActivity {
         });
     }
 
-    private void guaradarPlato(){
+    private void guardarPlato(){
+        //Si llega aqui es porque ya se valido que ningun campo venga vacio
+        producto.setPrecio(Long.parseLong(mEtPrecio.getText().toString()));
+        producto.setTitulo(mEtTitulo.getText().toString());
+        producto.setDescripcion(mEtDescripcion.getText().toString());
+
         DatabaseReference refPlato = null;
         if (producto.getId() == null)
             refPlato = mDatabase.child("platos").push();
@@ -136,7 +130,7 @@ public class AgregarProductoActivity extends AppCompatActivity {
             mEtTitulo.setText(producto.getTitulo());
             mEtDescripcion.setText(producto.getDescripcion());
             mEtPrecio.setText(producto.getPrecio().toString());
-            mTvImagen.setText(producto.getImg() != null ? "Imagen anterior" : "No hay imagen");
+            //mTvImagen.setText(producto.getImg() != null ? "Imagen anterior" : "No hay imagen");
             uriImagenSeleccionada = Uri.parse(extras.getString("img"));
 
             getSupportActionBar().setTitle("Editar Producto");
@@ -161,17 +155,58 @@ public class AgregarProductoActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            if(mTvImagen.getText().toString().equals("Imagen anterior")){
+            /*if(mTvImagen.getText().toString().equals("Imagen anterior")){
                 borrarImagen();
-            }
+            }*/
+
             uriImagenSeleccionada = data.getData();
-            mTvImagen.setText("Imagen seleccionada");
+            //mTvImagen.setText("Imagen seleccionada");
         }
     }
 
     public void borrarImagen(){
         StorageReference r = FirebaseStorage.getInstance().getReferenceFromUrl(uriImagenSeleccionada.toString());
         r.delete();
+    }
 
+    private void validar() {
+        // Resetear errores.
+        mEtTitulo.setError(null);
+        mEtDescripcion.setError(null);
+        mEtPrecio.setError(null);
+
+        boolean cancel = false;
+        boolean focus = true;
+        View focusView = null;
+
+        //Checkear espacios en blanco
+        if (uriImagenSeleccionada == null) {
+            Toast.makeText(AgregarProductoActivity.this, R.string.required_image, Toast.LENGTH_LONG).show();
+            cancel = true;
+            focus = false;
+        }
+        if (TextUtils.isEmpty(mEtTitulo.getText().toString())) {
+            mEtTitulo.setError(getString(R.string.error_field_required));
+            focusView = mEtTitulo;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(mEtDescripcion.getText().toString())) {
+            mEtDescripcion.setError(getString(R.string.error_field_required));
+            focusView = mEtDescripcion;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(mEtPrecio.getText().toString())) {
+            mEtPrecio.setError(getString(R.string.error_field_required));
+            focusView = mEtPrecio;
+            cancel = true;
+        }
+
+        if (cancel) {
+            if(focus) {
+                focusView.requestFocus(); //Mostrar errores
+            }
+        } else {
+            guardarPlato();
+        }
     }
 }

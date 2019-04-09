@@ -4,6 +4,9 @@
     <string name="ver">Ver</string>
     <string name="title_activity_home">Inicio</string>
     <string name="profile">Perfil</string>
+    <string name="guardar">Guardar</string>
+    <string name="error_field_required">Campo requerido</string>
+    <string name="required_image">Debes subir una imagen</string>
 
     <!--Strings del Login-->
     <string name="welcome_app">Bienvenido a \nOrdene Su Comida</string>
@@ -25,6 +28,9 @@
     <!--Strings de los Productos-->
     <string name="plato_del_dia">Plato del Día</string>
     <string name="productos">Productos</string>
+    <string name="titulo">Título</string>
+    <string name="descripcion">Descripción</string>
+    <string name="precio">Precio</string>
 
     <!--Strings de los Pedidos-->
     <string name="pedidos">Pedidos</string>

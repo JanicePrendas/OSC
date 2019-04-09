@@ -15,24 +15,28 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.R;
 import com.janice.osc.Util.Util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegisterCustomerFragment extends Fragment {
 
-    private EditText mNombre_edittext;
-    private EditText mEmail_edittext;
-    private EditText mContrasena_edittext;
-    private EditText mConfirmar_contrasena_edittext;
+    private EditText mNombre_edittext, mEmail_edittext, mContrasena_edittext, mConfirmar_contrasena_edittext;
     private Button mRegister_button;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    private FirebaseFirestore db;
     private AppCompatActivity mActivity;
     private View mFocusView;
     private boolean mCancel;
@@ -44,13 +48,9 @@ public class RegisterCustomerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_register_customer, container, false);
-
         setItems(view);
         setViewListeners(view);
-
         return view;
     }
 
@@ -72,7 +72,7 @@ public class RegisterCustomerFragment extends Fragment {
         mConfirmar_contrasena_edittext = view.findViewById(R.id.confirmar_contrasena_edittext);
         mRegister_button = view.findViewById(R.id.register_button);
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance("https://osc-app-a1dc6.firebaseio.com/").getReference("usuarios");
+        db = FirebaseFirestore.getInstance();
         mActivity = (AppCompatActivity) getActivity();
     }
 
@@ -84,7 +84,7 @@ public class RegisterCustomerFragment extends Fragment {
         validate_edittext(mContrasena_edittext);
         validate_edittext(mConfirmar_contrasena_edittext);
         valida_contrasena();
-       return !mCancel;
+        return !mCancel;
     }
 
     @Override
@@ -94,7 +94,6 @@ public class RegisterCustomerFragment extends Fragment {
         Util.updateUI(currentUser, mActivity);
     }
 
-
     public void registrar() {
         String email = mEmail_edittext.getText().toString();
         String password = mContrasena_edittext.getText().toString();
@@ -103,25 +102,32 @@ public class RegisterCustomerFragment extends Fragment {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
+                        if (task.isSuccessful()) { //Se ha creado el usuario exitosamente
                             FirebaseUser user = mAuth.getCurrentUser();
-                            DatabaseReference dbusuario = mDatabase.child(user.getUid());
-                            dbusuario.child("nombre").setValue(mNombre_edittext.getText().toString());
-                            dbusuario.child("tipo").setValue("cliente");
+
+                            //Ahora creamos el objeto cliente con sus atributos
+                            Map<String, Object> nueva_cliente = new HashMap<>();
+                            nueva_cliente.put("nombre", mNombre_edittext.getText().toString());
+                            nueva_cliente.put("tipo", "cliente");
+
+                            // Agregamos un nuevo documento a la colección usuarios con un ID generado automaticamente
+                            db.collection("usuarios").document(user.getUid())
+                                    .set(nueva_cliente)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {}
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {}
+                                    });
                             Util.updateUI(user, mActivity);
                         } else {
-
-
-                            Toast.makeText(mActivity, "Registration failed.\n" + task.getException(),
-                                    Toast.LENGTH_LONG).show();
+                            Toast.makeText(mActivity, "Registration failed.\n" + task.getException(), Toast.LENGTH_LONG).show();
                         }
-
                     }
                 });
-
     }
-
 
     private void validate_edittext(EditText e) {
         e.setError(null);
@@ -141,8 +147,7 @@ public class RegisterCustomerFragment extends Fragment {
                 mCancel = true;
             if (mFocusView == null)
                 mFocusView = mContrasena_edittext;
-        } else
-        {
+        } else {
             if (!mContrasena_edittext.getText().toString().equals(mConfirmar_contrasena_edittext.getText().toString())) {
                 mConfirmar_contrasena_edittext.setError("Las contraseñas no coinciden");
                 if (!mCancel)

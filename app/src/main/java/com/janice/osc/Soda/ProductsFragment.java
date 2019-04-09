@@ -52,7 +52,6 @@ public class ProductsFragment extends Fragment {
     private List<String> mIds;
 
     private StorageReference mStorageRef;
-    private DatabaseReference mDatabase;
 
     private FirebaseUser mUser;
 
@@ -71,97 +70,31 @@ public class ProductsFragment extends Fragment {
         setViewListeners();
         CargarSpinner();
 
-        Toast.makeText(getContext(), "products", Toast.LENGTH_LONG);
         return view;
     }
 
     private void CargarSpinner() {
-        final String[] options = {
-                "Todos",
-                "Activos",
-                "Inactivos",
-        };
+        final String[] options = {"Todos","Activos","Inactivos"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getContext(), android.R.layout.simple_spinner_item, options);
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, options);
 
         mSpinnerVer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //cambio de seleccion
             }
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         mSpinnerVer.setAdapter(adapter);
-
-
     }// fin de CargarSpinner
 
     private void setViewListeners() {
         mfloatAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
-                startActivity(intent);
-            }
-        });
-//        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Soda s = dataSnapshot.getValue(Soda.class);
-//                Log.d("tag",s.getOrdenes().toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-        mDatabase.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Producto p = dataSnapshot.getValue(Producto.class);
-                p.setId(dataSnapshot.getKey());
-                mIds.add(dataSnapshot.getKey());
-                mAdapter.add(p);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Producto p = dataSnapshot.getValue(Producto.class);
-                p.setId(dataSnapshot.getKey());
-                int index = mIds.indexOf(dataSnapshot.getKey());
-                if (index != -1) {
-                    Producto pc = mProductos.get(index);
-                    mProductos.remove(pc);
-                    mProductos.add(index, p);
-                    mAdapter.notifyDataSetChanged();
-                }
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                int index = mIds.indexOf(dataSnapshot.getKey());
-                if (index != -1) {
-                    mProductos.remove(index);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                sendToAgregarProductoActivity();
             }
         });
     }
@@ -172,8 +105,7 @@ public class ProductsFragment extends Fragment {
         Producto p = mProductos.get(info.position);
         switch (item.getItemId()) {
             case 1:
-                Intent intento = new Intent(getActivity(),
-                        AgregarProductoActivity.class);
+                Intent intento = new Intent(getActivity(), AgregarProductoActivity.class);
                 Bundle paquete = new Bundle();
                 paquete.putString("id", p.getId());
                 paquete.putString("img", p.getImg());
@@ -186,7 +118,6 @@ public class ProductsFragment extends Fragment {
             case 2:
                 borrarProducto(p.getId());
                 break;
-
             default:
                 break;
         }
@@ -194,22 +125,16 @@ public class ProductsFragment extends Fragment {
     }
 
     private void setItems(View view) {
-
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-//        mDatabase = FirebaseDatabase.getInstance("https://osc-app-a1dc6.firebaseio.com/").getReference("usuarios").child(mUser.getUid());
-        mDatabase = FirebaseDatabase.getInstance("https://osc-app-a1dc6.firebaseio.com/").getReference("usuarios").child(mUser.getUid()).child("productos");
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mfloatAB = view.findViewById(R.id.agregar_float_button);
         mSpinnerVer = view.findViewById(R.id.spinner_ver);
-
         mLvMenu = view.findViewById(R.id.productos_listview);
         mProductos = new ArrayList<>();
         mIds = new ArrayList<>();
         mAdapter = new MyListAdapter();
         mLvMenu.setAdapter(mAdapter);
-
         registerForContextMenu(mLvMenu);
-
     }
 
     @Override
@@ -218,16 +143,10 @@ public class ProductsFragment extends Fragment {
         menu.setHeaderTitle("Administrar Producto");
         menu.add(0, 1, 0, "Editar");
         menu.add(0, 2, 0, "Borrar");
-
     }
 
     public void borrarProducto(String id){
-        mDatabase.child("productos").child(id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-            }
-        });
+        Toast.makeText(getContext(), "Hay que borrar este producto...", Toast.LENGTH_LONG).show();
     }
 
     private class MyListAdapter extends ArrayAdapter<Producto> {
@@ -251,12 +170,20 @@ public class ProductsFragment extends Fragment {
                     .into(ivProducto);
             TextView tvTitulo = itemView.findViewById(R.id.plato);
             tvTitulo.setText(productoActual.getTitulo());
+
             TextView tvDescripcion = itemView.findViewById(R.id.nombre);
             tvDescripcion.setText(productoActual.getDescripcion());
+
             TextView tvPrecio = itemView.findViewById(R.id.precio);
             DecimalFormat df = new DecimalFormat("₡###,###.###");
             tvPrecio.setText(df.format(productoActual.getPrecio()));
+
             return itemView;
         }
+    }
+
+    private void sendToAgregarProductoActivity(){
+        Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
+        startActivity(intent);
     }
 }

@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.Customer.HomeCustomer;
 import com.janice.osc.Soda.HomeSoda;
 
@@ -19,25 +18,32 @@ public class Util {
     public static void updateUI(FirebaseUser user, final AppCompatActivity activity) {
         if (user != null) {
             Toast.makeText(activity, "Autenticated.", Toast.LENGTH_LONG).show();
-            String uid = user.getUid();
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://osc-app-a1dc6.firebaseio.com/").getReference("usuarios");
-            mDatabase.child(uid).child("tipo").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String id = user.getUid();
+            DocumentReference reference =  db.collection("usuarios").document(user.getUid());
+            reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String tipo = dataSnapshot.getValue(String.class);
-                    if (tipo.equals("soda")) {
-                        Intent i = new Intent(activity, HomeSoda.class);
-                        activity.startActivity(i);
-                    }else{
-                        Intent i = new Intent(activity, HomeCustomer.class);
-                        activity.startActivity(i);
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()) {
+                            DocumentSnapshot result = task.getResult();
+                            Intent i;
+                            if(result.get("tipo").equals("soda")){
+                                i = new Intent(activity, HomeSoda.class);
+                            }
+                            else{
+                                i = new Intent(activity, HomeCustomer.class);
+                            }
+                            activity.startActivity(i);
+                        }else {//Error obteniendo el documento
+                            Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-
-            @Override
-            public void onCancelled (@NonNull DatabaseError databaseError){}
-        });
-        } else {
+            });
+        }
+        else {
             Toast.makeText(activity, "Not Autenticated.", Toast.LENGTH_LONG).show();
         }
     }

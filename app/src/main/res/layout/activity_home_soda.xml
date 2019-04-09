@@ -7,7 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".Soda.HomeSoda">
 
-
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/navigation" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -15,14 +19,5 @@
         android:layout_width="match_parent"
         android:background="?android:attr/windowBackground"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/navigation_soda"
-        />
-
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/navigation"
-        />
-
+        app:menu="@menu/navigation_soda" />
 </RelativeLayout>
