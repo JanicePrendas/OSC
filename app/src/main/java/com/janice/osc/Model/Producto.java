@@ -2,14 +2,12 @@ package com.janice.osc.Model;
 
 public class Producto {
 
-    private String id;
     private String titulo;
     private String descripcion;
     private String img;
     private Long precio;
 
-    public Producto(String id, String titulo, String descripcion, String img, Long precio) {
-        this.id = id;
+    public Producto(String titulo, String descripcion, String img, Long precio) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.img = img;
@@ -20,20 +18,12 @@ public class Producto {
 
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getTitulo() {
         return titulo;
     }
 
     public String getDescripcion() {
         return descripcion;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setTitulo(String titulo) {

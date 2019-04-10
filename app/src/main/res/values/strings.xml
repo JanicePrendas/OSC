@@ -7,6 +7,8 @@
     <string name="guardar">Guardar</string>
     <string name="error_field_required">Campo requerido</string>
     <string name="required_image">Debes subir una imagen</string>
+    <string name="uploading">Subiendo archivo…</string>
+    <string name="error">Error</string>
 
     <!--Strings del Login-->
     <string name="welcome_app">Bienvenido a \nOrdene Su Comida</string>
@@ -34,6 +36,8 @@
 
     <!--Strings de los Pedidos-->
     <string name="pedidos">Pedidos</string>
+    <string name="error_add_product">Error al agregar producto</string>
+    <string name="product_added">Producto agregado</string>
 
     <!--Strings Soda-->
     <string name="sodas">Sodas</string>

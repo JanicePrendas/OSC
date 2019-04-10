@@ -105,18 +105,21 @@ public class ProductsFragment extends Fragment {
         Producto p = mProductos.get(info.position);
         switch (item.getItemId()) {
             case 1:
+                Toast.makeText(getContext(), "Hay que editar este producto...", Toast.LENGTH_LONG).show();
+                /*
                 Intent intento = new Intent(getActivity(), AgregarProductoActivity.class);
                 Bundle paquete = new Bundle();
-                paquete.putString("id", p.getId());
                 paquete.putString("img", p.getImg());
                 paquete.putString("titulo", p.getTitulo());
                 paquete.putString("descripcion", p.getDescripcion());
                 paquete.putLong("precio",p.getPrecio());
                 intento.putExtras(paquete);
                 startActivity(intento);
+                */
                 break;
             case 2:
-                borrarProducto(p.getId());
+                Toast.makeText(getContext(), "Hay que borrar este producto...", Toast.LENGTH_LONG).show();
+                //borrarProducto(p.getId());
                 break;
             default:
                 break;
@@ -184,6 +187,7 @@ public class ProductsFragment extends Fragment {
 
     private void sendToAgregarProductoActivity(){
         Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
+        intent.putExtra("sodaID", mUser.getUid());
         startActivity(intent);
     }
 }

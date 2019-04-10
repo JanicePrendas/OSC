@@ -12,7 +12,7 @@ public class Soda extends User {
     private List<Producto> productos;
 
     public Soda(String id, String nombre, String correo, List<Order> ordenes, String telefono, String direccion, List<Producto> productos) {
-        super(id,nombre,correo,ordenes);
+        super(nombre,correo,ordenes);
         this.telefono = telefono;
         this.direccion = direccion;
         this.productos = productos;

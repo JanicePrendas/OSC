@@ -36,6 +36,7 @@ public class Util {
                                 i = new Intent(activity, HomeCustomer.class);
                             }
                             activity.startActivity(i);
+                            activity.finish();
                         }else {//Error obteniendo el documento
                             Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show();
                         }
