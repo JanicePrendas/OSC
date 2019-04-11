@@ -23,7 +23,7 @@
             android:layout_marginEnd="16dp"/>
 
         <TextView
-            android:id="@+id/plato"
+            android:id="@+id/titulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/imagen"
@@ -32,12 +32,12 @@
             android:textColor="@android:color/black" />
 
         <TextView
-            android:id="@+id/nombre"
+            android:id="@+id/descripcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/plato"
-            android:layout_alignStart="@+id/plato"
-            android:layout_below="@+id/plato"
+            android:layout_alignLeft="@+id/titulo"
+            android:layout_alignStart="@+id/titulo"
+            android:layout_below="@+id/titulo"
             android:textSize="18sp"
             android:text="Casado con papitas extra"/>
 
@@ -45,9 +45,9 @@
             android:id="@+id/precio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/nombre"
-            android:layout_alignStart="@+id/nombre"
-            android:layout_below="@+id/nombre"
+            android:layout_alignLeft="@+id/descripcion"
+            android:layout_alignStart="@+id/descripcion"
+            android:layout_below="@+id/descripcion"
             android:text="₡ Precio"
             android:textSize="18sp"
             android:textColor="@color/colorPrimaryLight" />
