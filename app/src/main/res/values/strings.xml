@@ -9,6 +9,7 @@
     <string name="required_image">Debes subir una imagen</string>
     <string name="uploading">Subiendo archivo…</string>
     <string name="error">Error</string>
+    <string name="update_data">Actualizar Datos</string>
 
     <!--Strings del Login-->
     <string name="welcome_app">Bienvenido a \nOrdene Su Comida</string>
