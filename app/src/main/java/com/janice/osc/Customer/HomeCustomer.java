@@ -3,7 +3,9 @@ package com.janice.osc.Customer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -15,33 +17,39 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.Model.Customer;
+import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Soda.OrdersFragment;
 import com.janice.osc.Soda.ProductsFragment;
 import com.janice.osc.Soda.ProfileSodaFragment;
-import com.janice.osc.Util.SectionsPagerAdapter;
 
 public class HomeCustomer extends AppCompatActivity {
 
     private FirebaseFirestore db;
-    FirebaseUser currentUser;
-    ViewPager mViewPager;
-    Customer cliente;
+    private FirebaseUser currentUser;
+    private Customer customer;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.nav_products:
-                    return true;
+                    selectedFragment = new SodasFragment();
+                    break;
                 case R.id.nav_orders:
-                    return true;
-                case R.id.nav_profile_soda:
-                    return true;
+                    selectedFragment = new CustomerOrdersFragment();
+                    break;
+                case R.id.nav_profile_customer:
+                    selectedFragment = new CustomerProfileFragment();
+                    break;
             }
-            return false;
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment_container, selectedFragment).commit();
+            return true;
         }
     };
 
@@ -51,23 +59,11 @@ public class HomeCustomer extends AppCompatActivity {
         setContentView(R.layout.activity_home_customer);
 
         setItems();
-        setViewPagerAdapter();
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
 
-    private void setViewPagerAdapter(){
-        // Setear adaptador al viewpager.
-        mViewPager = findViewById(R.id.fragment_container);
-        setupViewPager(mViewPager);
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SodasFragment());
-        adapter.addFragment(new CustomerOrdersFragment());
-        adapter.addFragment(new CustomerOrdersFragment());
-        viewPager.setAdapter(adapter);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SodasFragment()).commit();
     }
 
     private void setItems(){
@@ -80,8 +76,8 @@ public class HomeCustomer extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        cliente = task.getResult().toObject(Customer.class);
-                        setTitle("Hola, " + cliente.getNombre());
+                        customer = task.getResult().toObject(Customer.class);
+                        setTitle("Hola, " + customer.getNombre());
                     }
                 }
             }

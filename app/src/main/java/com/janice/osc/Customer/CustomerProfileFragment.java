@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -24,13 +26,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.Model.Customer;
 import com.janice.osc.R;
+import com.janice.osc.Soda.ProfileSodaFragment;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class CustomerProfileFragment extends Fragment {
-    
+
     private EditText mNombre_edittext, mEmail_edittext, mContrasena_edittext, mNueva_contrasena_edittext;
     private Button mUpdate_button;
     private AppCompatActivity mActivity;
@@ -93,14 +96,16 @@ public class CustomerProfileFragment extends Fragment {
     }
 
     public void updateCustomerInformation() {
+        final String email = userCustomer.getEmail();
         AuthCredential credential = EmailAuthProvider
-                .getCredential(userCustomer.getEmail(),mContrasena_edittext.getText().toString());
+                .getCredential(email, mContrasena_edittext.getText().toString());
         userCustomer.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    userCustomer.updateEmail(mEmail_edittext.getText().toString());
-                    if(!mNueva_contrasena_edittext.getText().toString().equals(""))
+                if (task.isSuccessful()) {
+                    if (!email.equals(mEmail_edittext.getText().toString()))
+                        userCustomer.updateEmail(mEmail_edittext.getText().toString());
+                    if (!mNueva_contrasena_edittext.getText().toString().equals(""))
                         userCustomer.updatePassword(mNueva_contrasena_edittext.getText().toString());
                     Map<String, Object> updates = new HashMap<>();
                     updates.put("nombre", mNombre_edittext.getText().toString());
@@ -109,13 +114,20 @@ public class CustomerProfileFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    mActivity.getSupportActionBar().setTitle("Hola, "+mNombre_edittext.getText().toString());
+                                    mActivity.getSupportActionBar().setTitle("Hola, " + mNombre_edittext.getText().toString());
                                     Toast.makeText(mActivity, "Información actualizada", Toast.LENGTH_LONG);
+                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new CustomerProfileFragment()).commit();
+
                                 }
                             });
-                }else{
+                } else {
                     mContrasena_edittext.setError("Contraseña incorrecta");
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Error perfil customer", e.getMessage());
             }
         });
 
@@ -134,7 +146,7 @@ public class CustomerProfileFragment extends Fragment {
     }
 
     private void setItems(View view) {
-        mNombre_edittext = view.findViewById(R.id.nombre_soda_edittext);
+        mNombre_edittext = view.findViewById(R.id.nombre_edittext);
         mEmail_edittext = view.findViewById(R.id.email_edittext);
         mUpdate_button = view.findViewById(R.id.update_button);
         mContrasena_edittext = view.findViewById(R.id.contrasena_edittext);

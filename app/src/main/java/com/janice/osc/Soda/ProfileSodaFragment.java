@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.janice.osc.Customer.SodasFragment;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 
@@ -67,7 +68,7 @@ public class ProfileSodaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (validate()) {
-                    updateSodaInformation();
+                    updateCustomerInformation();
                 }
             }
         });
@@ -99,14 +100,15 @@ public class ProfileSodaFragment extends Fragment {
         return !mCancel;
     }
 
-    public void updateSodaInformation() {
+    public void updateCustomerInformation() {
         AuthCredential credential = EmailAuthProvider
                 .getCredential(userSoda.getEmail(),mContrasena_edittext.getText().toString());
         userSoda.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    userSoda.updateEmail(mEmail_edittext.getText().toString());
+                    if (!userSoda.getEmail().equals(mEmail_edittext.getText().toString()))
+                        userSoda.updateEmail(mEmail_edittext.getText().toString());
                     if(!mNueva_contrasena_edittext.getText().toString().equals(""))
                         userSoda.updatePassword(mNueva_contrasena_edittext.getText().toString());
                     Map<String, Object> updates = new HashMap<>();
@@ -120,6 +122,7 @@ public class ProfileSodaFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     mActivity.getSupportActionBar().setTitle("Hola, "+mNombre_edittext.getText().toString());
                                     Toast.makeText(mActivity, "Información actualizada", Toast.LENGTH_LONG);
+                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileSodaFragment()).commit();
                                 }
                             });
                 }else{
