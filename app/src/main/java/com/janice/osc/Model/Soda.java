@@ -11,7 +11,7 @@ public class Soda extends User {
     private String direccion;
     private List<Producto> productos;
 
-    public Soda(String id, String nombre, String correo, List<Order> ordenes, String telefono, String direccion, List<Producto> productos) {
+    public Soda(String nombre, String correo, List<Order> ordenes, String telefono, String direccion, List<Producto> productos) {
         super(nombre,correo,ordenes);
         this.telefono = telefono;
         this.direccion = direccion;
