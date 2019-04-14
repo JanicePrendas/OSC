@@ -13,6 +13,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.Customer.HomeCustomer;
 import com.janice.osc.Soda.HomeSoda;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class Util {
 
     public static void updateUI(FirebaseUser user, final AppCompatActivity activity) {
@@ -47,5 +52,24 @@ public class Util {
         else {
             Toast.makeText(activity, "Not Autenticated.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static String DeInputStreamAString(InputStream is) {
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try {
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {sb.append(line+"\n");}
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {br.close();}
+                catch (IOException e)
+                {e.printStackTrace();}
+            }
+        }
+        return sb.toString();
     }
 }

@@ -49,6 +49,7 @@
     <string name="update_data">Actualizar</string>
     <string name="contrasena_anterior">Contraseña Actual</string>
     <string name="nueva_contrasena">Contraseña nueva (opcional)</string>
+    <string name="acerca_de">Acerca de</string>
 
 
 </resources>

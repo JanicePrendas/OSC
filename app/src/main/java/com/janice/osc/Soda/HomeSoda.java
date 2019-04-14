@@ -1,10 +1,12 @@
 package com.janice.osc.Soda;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,6 +17,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.Model.Soda;
+import com.janice.osc.NamesActivity;
 import com.janice.osc.R;
 
 public class HomeSoda extends AppCompatActivity {
@@ -74,5 +77,23 @@ public class HomeSoda extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_acerca_de, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.item_acerca_de:
+                Intent i = new Intent(this, NamesActivity.class);
+                startActivity(i);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Soda.AgregarProductoActivity"></activity>
+        <activity android:name=".NamesActivity"></activity>
+        <activity android:name=".Soda.AgregarProductoActivity" />
         <activity
             android:name=".Customer.HomeCustomer"
             android:label="@string/title_activity_home" />
