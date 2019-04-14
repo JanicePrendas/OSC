@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,7 +120,9 @@ public class RegisterCustomerFragment extends Fragment {
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
-                                        public void onFailure(@NonNull Exception e) {}
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e("REGISTER SODA", e.getMessage());
+                                        }
                                     });
                             Util.updateUI(user, mActivity);
                         } else {

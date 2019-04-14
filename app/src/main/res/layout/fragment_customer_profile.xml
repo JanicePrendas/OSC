@@ -77,12 +77,78 @@
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/register_button"
-            style="@style/Widget.AppCompat.Button.Colored"
-            app:layout_constraintEnd_toEndOf="parent"
+        <ImageView
+            android:id="@+id/contraseña"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/baseline_lock_black_36"
+            app:layout_constraintBottom_toBottomOf="@+id/campo_contraseña"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/campo_email"
+            app:layout_constraintTop_toTopOf="@+id/campo_contraseña" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/campo_contraseña"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            app:boxBackgroundColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/soda"
+            app:layout_constraintTop_toBottomOf="@id/campo_email">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/contrasena_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contrasena_anterior"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/iv_contraseña"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/baseline_lock_black_36"
+            app:layout_constraintBottom_toBottomOf="@+id/campo_nueva_contraseña"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/campo_nueva_contraseña" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/campo_nueva_contraseña"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            app:boxBackgroundColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/soda"
+            app:layout_constraintTop_toBottomOf="@id/campo_contraseña">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/nueva_contrasena_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nueva_contrasena"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/update_button"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -90,7 +156,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="@string/update_data" />
+            android:text="@string/update_data"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campo_nueva_contraseña" />
 
     </android.support.constraint.ConstraintLayout>
 

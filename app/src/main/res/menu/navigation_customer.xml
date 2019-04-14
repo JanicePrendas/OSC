@@ -12,7 +12,7 @@
         android:title="@string/pedidos" />
 
     <item
-        android:id="@+id/nav_profile_soda"
+        android:id="@+id/nav_profile_customer"
         android:icon="@drawable/baseline_person_black_24"
         android:title="@string/profile" />
 
