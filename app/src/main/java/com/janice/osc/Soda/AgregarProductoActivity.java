@@ -158,6 +158,7 @@ public class AgregarProductoActivity extends AppCompatActivity {
         producto.setTitulo(mEtTitulo.getText().toString());
         producto.setDescripcion(mEtDescripcion.getText().toString());
         producto.setImg(imagen_url);
+        producto.setEstado(Values.ACTIVO);
         producto.setPrecio(Long.parseLong(mEtPrecio.getText().toString()));
         //Creamos nuevo documento dentro de la subcoleccion productos de la soda
         db.collection("usuarios").document(sodaID)

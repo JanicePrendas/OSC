@@ -5,17 +5,27 @@ public class Producto {
     private String titulo;
     private String descripcion;
     private String img;
+    private int estado; //1: Activo, 0: Inactivo
     private Long precio;
 
-    public Producto(String titulo, String descripcion, String img, Long precio) {
+    public Producto(String titulo, String descripcion, String img, int estado, Long precio) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.img = img;
+        this.estado = estado;
         this.precio = precio;
     }
 
     public Producto() {
 
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 
     public String getTitulo() {

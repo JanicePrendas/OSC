@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -42,6 +43,7 @@ import com.janice.osc.Model.Producto;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
+import com.janice.osc.Util.Values;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -54,7 +56,6 @@ import in.srain.cube.views.GridViewWithHeaderAndFooter;
 public class ProductsFragment extends Fragment {
 
     private FloatingActionButton mfloatAB;
-    private ListView mLvMenu;
     private Spinner mSpinnerVer;
     private List<Producto> mProductos;
     private ArrayAdapter<Producto> mAdapter;
@@ -70,9 +71,17 @@ public class ProductsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_products, container, false);
         setItems(view);
+        CargarSpinner();
         setListeners();
         cargarProductos();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mProductos==null)
+            cargarProductos();
     }
 
     private void setItems(View view) {
@@ -80,16 +89,16 @@ public class ProductsFragment extends Fragment {
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mfloatAB = view.findViewById(R.id.agregar_float_button);
         mSpinnerVer = view.findViewById(R.id.spinner_ver);
-        mLvMenu = view.findViewById(R.id.productos_listview);
+        mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
         mProductos = new ArrayList<>();
         //TODO: Luego reemplazar este plato principal quemado por uno de a deveras :v
-        mProductos.add(new Producto("Plato del Dia", "Casado con carne", "", (long) 3500));
+        mProductos.add(new Producto("Plato del Dia", "Casado con carne", "", Values.ACTIVO,(long) 3500));
 
         //mAdapter = new MyListAdapter();
         //mLvMenu.setAdapter(mAdapter);
         //registerForContextMenu(mLvMenu);
-        mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
-        CargarSpinner();
+
+        //registerForContextMenu(mGrid);
     }
 
     private void CargarSpinner() {
@@ -143,29 +152,27 @@ public class ProductsFragment extends Fragment {
      */
     private void setUpGridView(GridViewWithHeaderAndFooter grid) {
         if(mProductos.size()>0){
-            grid.addHeaderView(createHeaderView(0, mProductos)); //El plato principal siempre estara en la primera posicion
-            grid.setAdapter(new GridAdapter(getActivity(), mProductos));
+            grid.addHeaderView(createHeaderView(mProductos.get(0))); //El plato principal siempre estara en la primera posicion
+            List<Producto> productos_sin_plato_principal = mProductos; //Siempre hay que enviar la lista sin el plato principal al Adapter
+            productos_sin_plato_principal.remove(0);
+            grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal));
         }
     }
 
     /**
      * Crea un view de cabecera para mostrarlo en el principio del grid view.
      *
-     * @param position Posición del item que sera el grid view dentro de {@code items}
-     * @param items    Array de productos
      * @return Header View
      */
-    private View createHeaderView(int position, List<Producto> items) {
+    private View createHeaderView(Producto item) {
         View view;
-        //TODO: Debuggear mas porque se cae al cambiar de pestañas
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.template_plato_del_dia, null, false);
 
-        Producto item = items.get(position);
-
-        //TODO Seteando Imagen
+        //Seteando Imagen
         ImageView image = (ImageView) view.findViewById(R.id.imagen);
-        //Glide.with(image.getContext()).load(item.getIdThumbnail()).into(image);
+        if(!item.getImg().equals("")) //Solo seteamos una imagen si el objeto trae una. Si no trae ninguna, se queda con la imagen default del layout
+            Glide.with(image.getContext()).load(item.getImg()).into(image);
 
         // Seteando Titulo
         TextView name = (TextView) view.findViewById(R.id.titulo);
@@ -188,6 +195,14 @@ public class ProductsFragment extends Fragment {
 
 
 
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Administrar Producto");
+        menu.add(0, 1, 0, "Editar");
+        menu.add(0, 2, 0, "Borrar");
+    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -215,14 +230,6 @@ public class ProductsFragment extends Fragment {
                 break;
         }
         return true;
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("Administrar Producto");
-        menu.add(0, 1, 0, "Editar");
-        menu.add(0, 2, 0, "Borrar");
     }
 
     public void borrarProducto(String id) {
