@@ -1,52 +1,31 @@
 package com.janice.osc.Soda;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.janice.osc.Model.Producto;
-import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
 import com.janice.osc.Util.Values;
-import com.squareup.picasso.Picasso;
-
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +37,6 @@ public class ProductsFragment extends Fragment {
     private FloatingActionButton mfloatAB;
     private Spinner mSpinnerVer;
     private List<Producto> mProductos;
-    private ArrayAdapter<Producto> mAdapter;
     private GridViewWithHeaderAndFooter mGrid;
     private FirebaseUser mUser;
     private FirebaseFirestore db;
@@ -70,6 +48,7 @@ public class ProductsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_products, container, false);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Fijar verticalmente
         setItems(view);
         CargarSpinner();
         setListeners();
@@ -187,86 +166,6 @@ public class ProductsFragment extends Fragment {
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
         return view;
-    }
-
-
-
-
-
-
-
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("Administrar Producto");
-        menu.add(0, 1, 0, "Editar");
-        menu.add(0, 2, 0, "Borrar");
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Producto p = mProductos.get(info.position);
-        switch (item.getItemId()) {
-            case 1:
-                Toast.makeText(getContext(), "Hay que editar este producto...", Toast.LENGTH_LONG).show();
-                /*
-                Intent intento = new Intent(getActivity(), AgregarProductoActivity.class);
-                Bundle paquete = new Bundle();
-                paquete.putString("img", p.getImg());
-                paquete.putString("titulo", p.getTitulo());
-                paquete.putString("descripcion", p.getDescripcion());
-                paquete.putLong("precio",p.getPrecio());
-                intento.putExtras(paquete);
-                startActivity(intento);
-                */
-                break;
-            case 2:
-                Toast.makeText(getContext(), "Hay que borrar este producto...", Toast.LENGTH_LONG).show();
-                //borrarProducto(p.getId());
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
-    public void borrarProducto(String id) {
-        Toast.makeText(getContext(), "Hay que borrar este producto...", Toast.LENGTH_LONG).show();
-    }
-
-    private class MyListAdapter extends ArrayAdapter<Producto> {
-        public MyListAdapter() {
-            super(ProductsFragment.this.getActivity(), R.layout.template_soda_product, mProductos);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // Make sure we have a view to work with (may have been given null)
-            View itemView = convertView;
-            if (itemView == null) {
-                itemView = ProductsFragment.this.getActivity().getLayoutInflater().inflate(R.layout.template_soda_product, parent, false);
-            }
-
-            Producto productoActual = mProductos.get(position);
-            ImageView ivProducto = itemView.findViewById(R.id.imagen);
-            Picasso.get()
-                    .load(productoActual.getImg())
-                    .error(R.drawable.ic_launcher_foreground)
-                    .into(ivProducto);
-            TextView tvTitulo = itemView.findViewById(R.id.plato);
-            tvTitulo.setText(productoActual.getTitulo());
-
-            TextView tvDescripcion = itemView.findViewById(R.id.nombre);
-            tvDescripcion.setText(productoActual.getDescripcion());
-
-            TextView tvPrecio = itemView.findViewById(R.id.precio);
-            DecimalFormat df = new DecimalFormat("₡###,###.###");
-            tvPrecio.setText(df.format(productoActual.getPrecio()));
-
-            return itemView;
-        }
     }
 
     private void sendToAgregarProductoActivity() {
