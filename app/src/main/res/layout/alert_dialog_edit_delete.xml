@@ -26,5 +26,5 @@
         android:background="?android:attr/selectableItemBackground"
         android:drawableStart="@drawable/baseline_delete_black_24"
         android:drawableLeft="@drawable/baseline_delete_black_24"
-        android:text="@string/edit" />
+        android:text="@string/delete" />
 </LinearLayout>

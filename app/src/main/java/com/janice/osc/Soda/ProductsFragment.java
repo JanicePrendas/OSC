@@ -14,8 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,7 +36,7 @@ import java.util.List;
 import in.srain.cube.views.GridViewWithHeaderAndFooter;
 
 
-public class ProductsFragment extends Fragment {
+public class ProductsFragment extends Fragment{
 
     private FloatingActionButton mfloatAB;
     private Spinner mSpinnerVer;
@@ -70,14 +74,6 @@ public class ProductsFragment extends Fragment {
         mSpinnerVer = view.findViewById(R.id.spinner_ver);
         mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
         mProductos = new ArrayList<>();
-        //TODO: Luego reemplazar este plato principal quemado por uno de a deveras :v
-        mProductos.add(new Producto("Plato del Dia", "Casado con carne", "", Values.ACTIVO,(long) 3500));
-
-        //mAdapter = new MyListAdapter();
-        //mLvMenu.setAdapter(mAdapter);
-        //registerForContextMenu(mLvMenu);
-
-        //registerForContextMenu(mGrid);
     }
 
     private void CargarSpinner() {
@@ -107,6 +103,9 @@ public class ProductsFragment extends Fragment {
     }
 
     private void cargarProductos() {
+        mProductos = new ArrayList<>(); //Resetear lista de productos para volverla a cargar desde 0
+        //TODO: Luego reemplazar este plato principal quemado por uno de a deveras :v
+        mProductos.add(new Producto("Plato del Dia", "Casado con carne", "", Values.ACTIVO,(long) 3500,"A_Plato del dia"));
         db.collection("usuarios").document(mUser.getUid())//De la soda actual...
                 .collection("productos") //Traigame los productos...
                 .get() //Vamos al get de una vez (sin el where) porque quiero todos los productos de la soda
@@ -134,7 +133,8 @@ public class ProductsFragment extends Fragment {
             grid.addHeaderView(createHeaderView(mProductos.get(0))); //El plato principal siempre estara en la primera posicion
             List<Producto> productos_sin_plato_principal = mProductos; //Siempre hay que enviar la lista sin el plato principal al Adapter
             productos_sin_plato_principal.remove(0);
-            grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal));
+            //grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal, this));
+            grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal, ProductsFragment.this));
         }
     }
 
@@ -172,5 +172,24 @@ public class ProductsFragment extends Fragment {
         Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
         intent.putExtra("sodaID", mUser.getUid());
         startActivity(intent);
+    }
+
+    public void borrarProducto(Producto producto) {
+        db.collection("usuarios").document(mUser.getUid())
+                .collection("productos").document(producto.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        cargarProductos();
+                        Toast.makeText(getActivity(), "Producto borrado",Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Error al borrar producto",Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

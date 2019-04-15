@@ -2,7 +2,6 @@ package com.janice.osc.Util;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.janice.osc.Model.Producto;
 import com.janice.osc.R;
+import com.janice.osc.Soda.ProductsFragment;
 
+import java.util.EventListener;
 import java.util.List;
 
 
@@ -22,10 +22,12 @@ public class GridAdapter extends BaseAdapter {
 
     private final Context mContext;
     private final List<Producto> items;
+    private ProductsFragment fragment;
 
-    public GridAdapter(Context c, List<Producto> items) {
+    public GridAdapter(Context c, List<Producto> items, ProductsFragment fragment/*EventListener listener*/) {
         mContext = c;
         this.items = items;
+        this.fragment = fragment;
     }
 
     @Override
@@ -92,30 +94,25 @@ public class GridAdapter extends BaseAdapter {
         TextView edit = viewAux.findViewById(R.id.edit);
         TextView delete = viewAux.findViewById(R.id.delete);
 
+        final AlertDialog alert = builder.create();
+
+
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                String s = String.format("Hay que editar %s",producto.getTitulo());
-                Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Hay que editar", Toast.LENGTH_LONG).show();
             }
         });
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                String s = String.format("Hay que borrar %s",producto.getTitulo());
-                Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
+                fragment.borrarProducto(producto);
+                alert.dismiss();
             }
         });
 
-/*
-        builder.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(final DialogInterface dialog, final int id) {
-                dialog.dismiss(); //Quitar dialog
-            }
-        });
-*/
-        final AlertDialog alert = builder.create();
+
         alert.show();
     }
 }

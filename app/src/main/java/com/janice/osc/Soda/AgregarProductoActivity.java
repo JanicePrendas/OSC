@@ -160,6 +160,11 @@ public class AgregarProductoActivity extends AppCompatActivity {
         producto.setImg(imagen_url);
         producto.setEstado(Values.ACTIVO);
         producto.setPrecio(Long.parseLong(mEtPrecio.getText().toString()));
+        producto.setId("");
+        crearProducto(producto);
+    }
+
+    private void crearProducto(Producto producto){
         //Creamos nuevo documento dentro de la subcoleccion productos de la soda
         db.collection("usuarios").document(sodaID)
                 .collection("productos")
@@ -167,14 +172,31 @@ public class AgregarProductoActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(AgregarProductoActivity.this, R.string.product_added, Toast.LENGTH_LONG).show();
-                        onBackPressed(); //Regresar a Home
+                        setIdProducto(documentReference);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(AgregarProductoActivity.this, R.string.error_add_product, Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void setIdProducto(DocumentReference productoRef){
+        productoRef
+                .update("id", productoRef.getId())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(AgregarProductoActivity.this, R.string.product_added, Toast.LENGTH_LONG).show();
+                        sendToHomeSoda(); //Regresar a Home
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Log.w(TAG, "Error updating document", e);
                     }
                 });
     }
@@ -232,5 +254,11 @@ public class AgregarProductoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void sendToHomeSoda() {
+        Intent intent = new Intent(getApplicationContext(), HomeSoda.class);
+        startActivity(intent);
+        finish();
     }
 }
