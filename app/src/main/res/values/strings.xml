@@ -9,6 +9,7 @@
     <string name="required_image">Debes subir una imagen</string>
     <string name="uploading">Subiendo archivo…</string>
     <string name="error">Error</string>
+    <string name="cancel">Cancelar</string>
 
     <!--Strings del Login-->
     <string name="welcome_app">Bienvenido a \nOrdene Su Comida</string>
@@ -33,6 +34,8 @@
     <string name="titulo">Título</string>
     <string name="descripcion">Descripción</string>
     <string name="precio">Precio</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Borrar</string>
 
     <!--Strings de los Pedidos-->
     <string name="pedidos">Pedidos</string>
