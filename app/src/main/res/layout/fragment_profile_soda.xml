@@ -44,7 +44,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
-            android:id="@+id/telefono"
+            android:id="@+id/precio"
             app:layout_constraintBottom_toBottomOf="@+id/campo_telefono"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/campo_telefono"

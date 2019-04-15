@@ -26,6 +26,7 @@ import com.janice.osc.R;
 import com.janice.osc.Soda.OrdersFragment;
 import com.janice.osc.Soda.ProductsFragment;
 import com.janice.osc.Soda.ProfileSodaFragment;
+import com.janice.osc.Util.Util;
 
 public class HomeCustomer extends AppCompatActivity {
 
@@ -107,5 +108,10 @@ public class HomeCustomer extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        Util.logout(this);
     }
 }

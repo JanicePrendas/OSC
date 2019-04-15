@@ -12,14 +12,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
+import com.janice.osc.Util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ public class SodasFragment extends Fragment {
 
     private List<Soda> mSodas;
     private GridViewWithHeaderAndFooter mGrid;
-    private FirebaseUser mUser;
     private FirebaseFirestore db;
 
     public SodasFragment() {
@@ -59,7 +57,6 @@ public class SodasFragment extends Fragment {
 
     private void setItems(View view) {
         db = FirebaseFirestore.getInstance();
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
         mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
         mSodas = new ArrayList<>();
     }
@@ -98,7 +95,7 @@ public class SodasFragment extends Fragment {
             grid.addHeaderView(createHeaderView(mSodas.get(0))); //El plato principal siempre estara en la primera posicion
             List<Soda> sodas_sin_plato_principal = mSodas; //Siempre hay que enviar la lista sin el plato principal al Adapter
             sodas_sin_plato_principal.remove(0);
-            grid.setAdapter(new GridAdapter<Soda>(getContext(), sodas_sin_plato_principal, SodasFragment.this));
+            grid.setAdapter(new GridAdapter<Soda>(getActivity(), sodas_sin_plato_principal, SodasFragment.this, R.layout.template_soda));
         }
     }
 
@@ -107,7 +104,7 @@ public class SodasFragment extends Fragment {
      *
      * @return Header View
      */
-    private View createHeaderView(Soda item) {
+    private View createHeaderView(final Soda item) {
         View view;
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.template_soda, null, false);
@@ -117,14 +114,26 @@ public class SodasFragment extends Fragment {
         name.setText(item.getNombre());
 
         // Seteando Direccion
-        TextView direccion = (TextView) view.findViewById(R.id.direccion);
+        TextView direccion = (TextView) view.findViewById(R.id.descripcion);
         direccion.setText(String.format("Dirección: %s", item.getDireccion()));
 
         // Seteando Telefono
-        TextView telefono = (TextView) view.findViewById(R.id.telefono);
+        TextView telefono = (TextView) view.findViewById(R.id.precio);
         telefono.setText(String.format("Teléfono: %s", item.getTelefono()));
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                verSoda(item);
+            }
+        });
+
         return view;
+    }
+
+    public void verSoda(Soda soda){
+        Util.idSodaSelected = soda.getId();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SodaProductsFragment()).commit();
     }
 
 

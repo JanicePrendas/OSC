@@ -137,7 +137,7 @@ public class ProductsFragment extends Fragment {
             List<Producto> productos_sin_plato_principal = mProductos; //Siempre hay que enviar la lista sin el plato principal al Adapter
             productos_sin_plato_principal.remove(0);
             //grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal, this));
-            grid.setAdapter(new GridAdapter(getActivity(), productos_sin_plato_principal, ProductsFragment.this));
+            grid.setAdapter(new GridAdapter(getActivity(), productos_sin_plato_principal, ProductsFragment.this, R.layout.template_ingrediente));
         }
     }
 
@@ -165,7 +165,7 @@ public class ProductsFragment extends Fragment {
         descripcion.setText(item.getDescripcion());
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.telefono);
+        TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
         return view;

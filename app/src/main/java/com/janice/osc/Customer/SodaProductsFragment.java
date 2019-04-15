@@ -68,7 +68,6 @@ public class SodaProductsFragment extends Fragment{
 
     private void cargarProductos() {
         mProductos = new ArrayList<>(); //Resetear lista de productos para volverla a cargar desde 0
-        //TODO: Luego reemplazar este plato principal quemado por uno de a deveras :v
         db.collection("usuarios").document(sodaId)//De la soda actual...
                 .collection("productos") //Traigame los productos...
 //                .whereEqualTo("estado","activo")
@@ -98,7 +97,7 @@ public class SodaProductsFragment extends Fragment{
             List<Producto> productos_sin_plato_principal = mProductos; //Siempre hay que enviar la lista sin el plato principal al Adapter
             productos_sin_plato_principal.remove(0);
             //grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal, this));
-            grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal, SodaProductsFragment.this));
+            grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal, SodaProductsFragment.this, R.layout.template_ingrediente));
         }
     }
 
@@ -126,7 +125,7 @@ public class SodaProductsFragment extends Fragment{
         descripcion.setText(item.getDescripcion());
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.telefono);
+        TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
         return view;

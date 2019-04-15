@@ -27,11 +27,13 @@ public class GridAdapter<T> extends BaseAdapter {
     private final Context mContext;
     private final List<T> items;
     private Fragment fragment;
+    private int layoutId;
 
-    public GridAdapter(Context c, List<T> items, Fragment fragment/*EventListener listener*/) {
+    public GridAdapter(Context c, List<T> items, Fragment fragment, int layout) {
         mContext = c;
         this.items = items;
         this.fragment = fragment;
+        this.layoutId =layout;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class GridAdapter<T> extends BaseAdapter {
 
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.template_ingrediente, viewGroup, false);
+            view = inflater.inflate(layoutId, viewGroup, false);
         }
 
         if (fragment instanceof ProductsFragment)
@@ -70,7 +72,7 @@ public class GridAdapter<T> extends BaseAdapter {
         final Soda item = (Soda) getItem(position);
 
         // Seteando Nombre
-        TextView name = (TextView) view.findViewById(R.id.direccion);
+        TextView name = (TextView) view.findViewById(R.id.nombre);
         name.setText(item.getNombre());
 
         // Seteando Direccion
@@ -78,14 +80,13 @@ public class GridAdapter<T> extends BaseAdapter {
         direccion.setText(String.format("Dirección: %s", item.getDireccion()));
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.telefono);
+        TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("Teléfono: %s", item.getTelefono()));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Util.idSodaSelected = item.getId();
-                fragment.getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SodaProductsFragment()).commit();
+                ((SodasFragment) fragment).verSoda(item);
             }
         });
 
@@ -100,7 +101,7 @@ public class GridAdapter<T> extends BaseAdapter {
             Glide.with(image.getContext()).load(item.getImg()).into(image);
 
         // Seteando Titulo
-        TextView name = (TextView) view.findViewById(R.id.direccion);
+        TextView name = (TextView) view.findViewById(R.id.descripcion);
         name.setText(item.getTitulo());
 
         // Seteando Descripción
@@ -108,7 +109,7 @@ public class GridAdapter<T> extends BaseAdapter {
         descripcion.setText(item.getDescripcion());
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.telefono);
+        TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
         if (setListener) {
             view.setOnClickListener(new View.OnClickListener() {

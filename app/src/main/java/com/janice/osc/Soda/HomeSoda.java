@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.NamesActivity;
 import com.janice.osc.R;
+import com.janice.osc.Util.Util;
 
 public class HomeSoda extends AppCompatActivity {
 
@@ -99,5 +100,10 @@ public class HomeSoda extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        Util.logout(this);
     }
 }

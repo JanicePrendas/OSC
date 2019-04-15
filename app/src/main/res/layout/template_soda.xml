@@ -19,7 +19,7 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/direccion"
+            android:id="@+id/descripcion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/nombre"
@@ -32,12 +32,12 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/telefono"
+            android:id="@+id/precio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/direccion"
-            android:layout_alignStart="@+id/direccion"
-            android:layout_alignLeft="@+id/direccion"
+            android:layout_below="@+id/descripcion"
+            android:layout_alignStart="@+id/descripcion"
+            android:layout_alignLeft="@+id/descripcion"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="2dp"
