@@ -20,6 +20,8 @@ import java.io.InputStreamReader;
 
 public class Util {
 
+    public static String idSodaSelected = "";
+
     public static void updateUI(FirebaseUser user, final AppCompatActivity activity) {
         if (user != null) {
             Toast.makeText(activity, "Autenticated.", Toast.LENGTH_LONG).show();

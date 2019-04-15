@@ -5,11 +5,13 @@ import java.util.List;
 
 public class User {
 
+    private String id;
     private String nombre;
     private String correo;
     private List<Order> ordenes;
 
-    public User(String nombre, String correo, List<Order> orders) {
+    public User(String id, String nombre, String correo, List<Order> orders) {
+        this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.ordenes = orders;
@@ -41,5 +43,13 @@ public class User {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

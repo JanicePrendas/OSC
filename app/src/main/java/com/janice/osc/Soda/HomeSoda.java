@@ -1,6 +1,7 @@
 package com.janice.osc.Soda;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -92,6 +93,9 @@ public class HomeSoda extends AppCompatActivity {
             case R.id.item_acerca_de:
                 Intent i = new Intent(this, NamesActivity.class);
                 startActivity(i);
+                break;
+            case R.id.verVideo:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/")));
                 break;
         }
         return super.onOptionsItemSelected(item);

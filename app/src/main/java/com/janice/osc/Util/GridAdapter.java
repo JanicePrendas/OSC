@@ -2,6 +2,8 @@ package com.janice.osc.Util;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
+import com.janice.osc.Customer.SodaProductsFragment;
+import com.janice.osc.Customer.SodasFragment;
 import com.janice.osc.Model.Producto;
+import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Soda.ProductsFragment;
 
@@ -18,13 +24,13 @@ import java.util.EventListener;
 import java.util.List;
 
 
-public class GridAdapter extends BaseAdapter {
+public class GridAdapter<T> extends BaseAdapter {
 
     private final Context mContext;
-    private final List<Producto> items;
-    private ProductsFragment fragment;
+    private final List<T> items;
+    private Fragment fragment;
 
-    public GridAdapter(Context c, List<Producto> items, ProductsFragment fragment/*EventListener listener*/) {
+    public GridAdapter(Context c, List<T> items, Fragment fragment/*EventListener listener*/) {
         mContext = c;
         this.items = items;
         this.fragment = fragment;
@@ -36,7 +42,7 @@ public class GridAdapter extends BaseAdapter {
     }
 
     @Override
-    public Producto getItem(int position) {
+    public T getItem(int position) {
         return items.get(position);
     }
 
@@ -53,7 +59,42 @@ public class GridAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.template_ingrediente, viewGroup, false);
         }
 
-        final Producto item = getItem(position);
+        if (fragment instanceof ProductsFragment)
+            setViewProductos(view, position, true);
+        else if (fragment instanceof SodasFragment)
+            setViewSodas(view, position);
+        else if (fragment instanceof SodaProductsFragment)
+            setViewProductos(view, position, false);
+        return view;
+    }
+
+    public void setViewSodas(View view, final int position) {
+        final Soda item = (Soda) getItem(position);
+
+        // Seteando Nombre
+        TextView name = (TextView) view.findViewById(R.id.nombre);
+        name.setText(item.getNombre());
+
+        // Seteando Direccion
+        TextView direccion = (TextView) view.findViewById(R.id.descripcion);
+        direccion.setText(String.format("Dirección: %s", item.getDireccion()));
+
+        // Seteando Precio
+        TextView precio = (TextView) view.findViewById(R.id.precio);
+        precio.setText(String.format("Teléfono: %s", item.getTelefono()));
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Util.idSodaSelected = item.getId();
+                fragment.getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SodaProductsFragment()).commit();
+            }
+        });
+
+    }
+
+    public void setViewProductos(View view, final int position, boolean setListener) {
+        final Producto item = (Producto) getItem(position);
 
         //Seteando Imagen
         ImageView image = (ImageView) view.findViewById(R.id.imagen);
@@ -71,18 +112,17 @@ public class GridAdapter extends BaseAdapter {
         // Seteando Precio
         TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                showMenu(item);
-            }
-        });
-
-        return view;
+        if (setListener) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    showMenuProductos((Producto) getItem(position));
+                }
+            });
+        }
     }
 
-    private void showMenu(final Producto producto) {
+    private void showMenuProductos(final Producto producto) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
@@ -107,7 +147,7 @@ public class GridAdapter extends BaseAdapter {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                fragment.borrarProducto(producto);
+                ((ProductsFragment) fragment).borrarProducto(producto);
                 alert.dismiss();
             }
         });

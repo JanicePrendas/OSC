@@ -4,4 +4,7 @@
     <item
         android:id="@+id/item_acerca_de"
         android:title="@string/acerca_de" />
+    <item
+        android:id="@+id/verVideo"
+        android:title="@string/verVideo" />
 </menu>
