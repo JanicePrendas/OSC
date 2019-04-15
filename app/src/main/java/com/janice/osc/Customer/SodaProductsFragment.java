@@ -1,37 +1,26 @@
 package com.janice.osc.Customer;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.janice.osc.Model.Producto;
 import com.janice.osc.R;
-import com.janice.osc.Soda.AgregarProductoActivity;
 import com.janice.osc.Util.GridAdapter;
 import com.janice.osc.Util.Util;
-import com.janice.osc.Util.Values;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,7 +126,7 @@ public class SodaProductsFragment extends Fragment{
         descripcion.setText(item.getDescripcion());
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.precio);
+        TextView precio = (TextView) view.findViewById(R.id.telefono);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
         return view;

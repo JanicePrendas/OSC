@@ -68,7 +68,7 @@ public class SodasFragment extends Fragment {
     }
 
     private void cargarSodas() {
-        mSodas = new ArrayList<>(); //Resetear lista de productos para volverla a cargar desde 0
+        mSodas = new ArrayList<>(); //Resetear lista de sodas para volverla a cargar desde 0
         db.collection("usuarios")
                 .whereEqualTo("tipo","soda") //filtramos por sodas equivale a where tipo = soda
                 .get() 
@@ -96,8 +96,9 @@ public class SodasFragment extends Fragment {
     private void setUpGridView(GridViewWithHeaderAndFooter grid) {
         if(mSodas.size()>0){
             grid.addHeaderView(createHeaderView(mSodas.get(0))); //El plato principal siempre estara en la primera posicion
-            List<Soda> productos_sin_plato_principal = mSodas; //Siempre hay que enviar la lista sin el plato principal al Adapter
-            grid.setAdapter(new GridAdapter<Soda>(getContext(), mSodas, SodasFragment.this));
+            List<Soda> sodas_sin_plato_principal = mSodas; //Siempre hay que enviar la lista sin el plato principal al Adapter
+            sodas_sin_plato_principal.remove(0);
+            grid.setAdapter(new GridAdapter<Soda>(getContext(), sodas_sin_plato_principal, SodasFragment.this));
         }
     }
 
@@ -112,15 +113,15 @@ public class SodasFragment extends Fragment {
         view = inflater.inflate(R.layout.template_soda, null, false);
 
         // Seteando Nombre
-        TextView name = (TextView) view.findViewById(R.id.titulo);
+        TextView name = (TextView) view.findViewById(R.id.nombre);
         name.setText(item.getNombre());
 
         // Seteando Direccion
-        TextView direccion = (TextView) view.findViewById(R.id.descripcion);
+        TextView direccion = (TextView) view.findViewById(R.id.direccion);
         direccion.setText(String.format("Dirección: %s", item.getDireccion()));
 
         // Seteando Telefono
-        TextView telefono = (TextView) view.findViewById(R.id.precio);
+        TextView telefono = (TextView) view.findViewById(R.id.telefono);
         telefono.setText(String.format("Teléfono: %s", item.getTelefono()));
 
         return view;

@@ -165,7 +165,7 @@ public class ProductsFragment extends Fragment {
         descripcion.setText(item.getDescripcion());
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.precio);
+        TextView precio = (TextView) view.findViewById(R.id.telefono);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
         return view;

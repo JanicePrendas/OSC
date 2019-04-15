@@ -2,7 +2,6 @@ package com.janice.osc.Util;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Soda.ProductsFragment;
 
-import java.util.EventListener;
 import java.util.List;
 
 
@@ -72,7 +70,7 @@ public class GridAdapter<T> extends BaseAdapter {
         final Soda item = (Soda) getItem(position);
 
         // Seteando Nombre
-        TextView name = (TextView) view.findViewById(R.id.nombre);
+        TextView name = (TextView) view.findViewById(R.id.direccion);
         name.setText(item.getNombre());
 
         // Seteando Direccion
@@ -80,7 +78,7 @@ public class GridAdapter<T> extends BaseAdapter {
         direccion.setText(String.format("Dirección: %s", item.getDireccion()));
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.precio);
+        TextView precio = (TextView) view.findViewById(R.id.telefono);
         precio.setText(String.format("Teléfono: %s", item.getTelefono()));
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +100,7 @@ public class GridAdapter<T> extends BaseAdapter {
             Glide.with(image.getContext()).load(item.getImg()).into(image);
 
         // Seteando Titulo
-        TextView name = (TextView) view.findViewById(R.id.nombre);
+        TextView name = (TextView) view.findViewById(R.id.direccion);
         name.setText(item.getTitulo());
 
         // Seteando Descripción
@@ -110,7 +108,7 @@ public class GridAdapter<T> extends BaseAdapter {
         descripcion.setText(item.getDescripcion());
 
         // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.precio);
+        TextView precio = (TextView) view.findViewById(R.id.telefono);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
         if (setListener) {
             view.setOnClickListener(new View.OnClickListener() {

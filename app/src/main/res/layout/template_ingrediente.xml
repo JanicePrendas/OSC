@@ -23,7 +23,7 @@
             android:scaleType="centerCrop" />
 
         <TextView
-            android:id="@+id/nombre"
+            android:id="@+id/direccion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -43,7 +43,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/precio"
+            android:id="@+id/telefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
