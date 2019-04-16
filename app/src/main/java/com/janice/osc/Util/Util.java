@@ -1,5 +1,7 @@
 package com.janice.osc.Util;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,15 +27,31 @@ public class Util {
 
     public static String idSodaSelected = "";
 
-    public static void logout(AppCompatActivity app){
-        FirebaseAuth.getInstance().signOut();
-        Intent i = new Intent(app, LoginActivity.class);
-        app.startActivity(i);
+    public static void logout(final AppCompatActivity app){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(app);
+        builder1.setMessage("Estás seguro de cerrar sesión?");
+        builder1.setCancelable(true);
+        builder1.setPositiveButton("Sí",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        FirebaseAuth.getInstance().signOut();
+                        Intent i = new Intent(app, LoginActivity.class);
+                        app.startActivity(i);
+
+                    } });
+        builder1.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {} });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+
+
     }
 
     public static void updateUI(FirebaseUser user, final AppCompatActivity activity) {
         if (user != null) {
-            Toast.makeText(activity, "Autenticated.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(activity, "Autenticated.", Toast.LENGTH_LONG).show();
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             String id = user.getUid();
@@ -61,7 +79,7 @@ public class Util {
             });
         }
         else {
-            Toast.makeText(activity, "Not Autenticated.", Toast.LENGTH_LONG).show();
+           // Toast.makeText(activity, "Not Autenticated.", Toast.LENGTH_LONG).show();
         }
     }
 
