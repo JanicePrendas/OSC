@@ -57,5 +57,8 @@
     <string name="verVideo">Ver video</string>
     <string name="cerrarSesion">Cerrar Sesión</string>
 
+    <!-- Splash Screen -->
+
+    <string name="splash">Ordene su comida</string>
 
 </resources>
