@@ -77,7 +77,7 @@ public class GridAdapter<T> extends BaseAdapter {
 
         // Seteando Direccion
         TextView direccion = (TextView) view.findViewById(R.id.descripcion);
-        direccion.setText(String.format("Dirección: %s", item.getDireccion()));
+        direccion.setText(String.format("Dirección: %s", /*item.getDireccion()*/"Pendiente"));
 
         // Seteando Precio
         TextView precio = (TextView) view.findViewById(R.id.precio);

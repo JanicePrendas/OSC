@@ -115,7 +115,7 @@ public class SodasFragment extends Fragment {
 
         // Seteando Direccion
         TextView direccion = (TextView) view.findViewById(R.id.descripcion);
-        direccion.setText(String.format("Dirección: %s", item.getDireccion()));
+        direccion.setText(String.format("Dirección: %s", /*item.getDireccion()*/"Pendiente"));
 
         // Seteando Telefono
         TextView telefono = (TextView) view.findViewById(R.id.precio);

@@ -27,6 +27,8 @@
     <string name="nombre_soda">Nombre de la Soda</string>
     <string name="direccion">Dirección</string>
     <string name="num_telefonico">Número Telefónico</string>
+    <string name="confirmar_ubic">Confirmar</string>
+    <string name="cancelar_ubic">Cancelar</string>
 
     <!--Strings de los Productos-->
     <string name="plato_del_dia">Plato del Día</string>

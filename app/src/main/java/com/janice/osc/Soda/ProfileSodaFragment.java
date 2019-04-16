@@ -82,7 +82,7 @@ public class ProfileSodaFragment extends Fragment {
                 soda = documentSnapshot.toObject(Soda.class);
                 mNombre_edittext.setText(soda.getNombre());
                 mTelefono_edittext.setText(soda.getTelefono());
-                mDireccion_edittext.setText(soda.getDireccion());
+                mDireccion_edittext.setText(/*soda.getDireccion()*/"Pendiente");
                 mEmail_edittext.setText(userSoda.getEmail());
             }
         });

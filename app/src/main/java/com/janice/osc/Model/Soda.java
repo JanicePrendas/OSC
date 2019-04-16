@@ -8,13 +8,15 @@ import java.util.List;
 public class Soda extends User {
 
     private String telefono;
-    private String direccion;
+    private double latitud;
+    private double longitud;
     private List<Producto> productos;
 
-    public Soda(String id, String nombre, String correo, List<Order> ordenes, String telefono, String direccion, List<Producto> productos) {
+    public Soda(String id, String nombre, String correo, List<Order> ordenes, String telefono, double latitud, double longitud, List<Producto> productos) {
         super(id, nombre,correo,ordenes);
         this.telefono = telefono;
-        this.direccion = direccion;
+        this.latitud = latitud;
+        this.longitud = longitud;
         this.productos = productos;
     }
 
@@ -31,11 +33,19 @@ public class Soda extends User {
         this.telefono = telefono;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public double getLatitud() {
+        return latitud;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
 }

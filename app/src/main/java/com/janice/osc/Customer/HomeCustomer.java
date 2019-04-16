@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -123,6 +124,7 @@ public class HomeCustomer extends AppCompatActivity {
                 dialog.setContentView(R.layout.dialogmap);////your custom content
                 MapView mMapView = (MapView) dialog.findViewById(R.id.mapView);
                 MapsInitializer.initialize(this);
+
                 mMapView.onCreate(dialog.onSaveInstanceState());
                 mMapView.onResume();
                 mMapView.getMapAsync(new OnMapReadyCallback() {
@@ -133,6 +135,15 @@ public class HomeCustomer extends AppCompatActivity {
                         googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
                         googleMap.getUiSettings().setZoomControlsEnabled(true);
                         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+                            public void onMapClick(LatLng point){
+                                Toast.makeText(HomeCustomer.this,
+                                        point.latitude + ", " + point.longitude,
+                                        Toast.LENGTH_SHORT).show();
+                                googleMap.clear();
+                                googleMap.addMarker(new MarkerOptions().position(point));
+                            }
+                        });
                     }
                 });
                 dialog.show();
