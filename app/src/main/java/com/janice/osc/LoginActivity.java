@@ -74,12 +74,12 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this, "Authentication good.",
-                                    Toast.LENGTH_SHORT).show();
+                            /*Toast.makeText(LoginActivity.this, "Authentication good.",
+                                    Toast.LENGTH_SHORT).show();*/
                             Util.updateUI(user, LoginActivity.this); //Para mandar al usuario a su home correspondiente
                         } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            /*Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();*/
                             Util.updateUI(null, LoginActivity.this);
                         }
                     }

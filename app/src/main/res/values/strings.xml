@@ -56,6 +56,7 @@
     <string name="Nombre_soda">Nombre Soda</string>
     <string name="verVideo">Ver video</string>
     <string name="cerrarSesion">Cerrar Sesión</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>
