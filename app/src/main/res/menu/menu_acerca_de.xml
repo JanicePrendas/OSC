@@ -7,4 +7,7 @@
     <item
         android:id="@+id/verVideo"
         android:title="@string/verVideo" />
+    <item
+        android:id="@+id/item_cerrar_sesion"
+        android:title="@string/cerrarSesion" />
 </menu>

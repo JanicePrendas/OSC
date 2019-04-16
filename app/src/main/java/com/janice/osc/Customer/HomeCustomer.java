@@ -106,12 +106,15 @@ public class HomeCustomer extends AppCompatActivity {
             case R.id.verVideo:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/")));
                 break;
+            case R.id.item_cerrar_sesion:
+                Util.logout(this);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+   /* @Override
     public void onBackPressed(){
         Util.logout(this);
-    }
+    }*/
 }

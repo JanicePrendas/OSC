@@ -55,6 +55,7 @@
     <string name="acerca_de">Acerca de</string>
     <string name="Nombre_soda">Nombre Soda</string>
     <string name="verVideo">Ver video</string>
+    <string name="cerrarSesion">Cerrar Sesión</string>
 
 
 </resources>
