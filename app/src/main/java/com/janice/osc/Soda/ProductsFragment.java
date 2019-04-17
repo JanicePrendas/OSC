@@ -134,10 +134,9 @@ public class ProductsFragment extends Fragment {
     private void setUpGridView(GridViewWithHeaderAndFooter grid) {
         if (mProductos.size() > 0) {
             grid.addHeaderView(createHeaderView(mProductos.get(0))); //El plato principal siempre estara en la primera posicion
-            List<Producto> productos_sin_plato_principal = mProductos; //Siempre hay que enviar la lista sin el plato principal al Adapter
+            List<Producto> productos_sin_plato_principal = new ArrayList<>(mProductos); //Siempre hay que enviar la lista sin el plato principal al Adapter
             productos_sin_plato_principal.remove(0);
-            //grid.setAdapter(new GridAdapter(getActivity(),productos_sin_plato_principal, this));
-            grid.setAdapter(new GridAdapter(getActivity(), productos_sin_plato_principal, ProductsFragment.this, R.layout.template_ingrediente));
+            grid.setAdapter(new GridAdapter<Producto>(getActivity(), productos_sin_plato_principal, ProductsFragment.this, R.layout.template_ingrediente));
         }
     }
 
