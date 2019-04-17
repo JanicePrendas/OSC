@@ -12,11 +12,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.janice.osc.Model.Producto;
+import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
 import com.janice.osc.Util.Util;
@@ -29,9 +33,11 @@ import in.srain.cube.views.GridViewWithHeaderAndFooter;
 
 public class SodaProductsFragment extends Fragment{
 
+    private TextView mNombreSoda;
     private List<Producto> mProductos;
     private GridViewWithHeaderAndFooter mGrid;
     private String sodaId;
+    private Soda mSoda_actual;
     private FirebaseFirestore db;
 
     public SodaProductsFragment() {
@@ -60,10 +66,27 @@ public class SodaProductsFragment extends Fragment{
         mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
         mProductos = new ArrayList<>();
         sodaId = Util.idSodaSelected;
+        mNombreSoda = view.findViewById(R.id.nombre_soda);
+        setSodaActual();
+        setNombreSoda();
     }
 
     private void setListeners() {
 
+    }
+
+    private void setSodaActual() {
+        DocumentReference docRef = db.collection("usuarios").document(sodaId);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                mSoda_actual = documentSnapshot.toObject(Soda.class);
+            }
+        });
+    }
+
+    private void setNombreSoda() {
+        mNombreSoda.setText(mSoda_actual.getNombre());
     }
 
     private void cargarProductos() {
