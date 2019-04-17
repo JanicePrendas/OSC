@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -114,28 +115,6 @@ public class HomeCustomer extends AppCompatActivity {
                 break;
             case R.id.item_cerrar_sesion:
                 Util.logout(this);
-                break;
-            case R.id.verMapa:
-                final Dialog dialog = new Dialog(this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                /////make map clear
-                dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                dialog.setContentView(R.layout.dialogmap);////your custom content
-                MapView mMapView = (MapView) dialog.findViewById(R.id.mapView);
-                MapsInitializer.initialize(this);
-                mMapView.onCreate(dialog.onSaveInstanceState());
-                mMapView.onResume();
-                mMapView.getMapAsync(new OnMapReadyCallback() {
-                    @Override
-                    public void onMapReady(final GoogleMap googleMap) {
-                        LatLng posisiabsen = new LatLng(10.012835, -84.101720); ////your lat lng
-                        googleMap.addMarker(new MarkerOptions().position(posisiabsen).title("Yout title"));
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
-                        googleMap.getUiSettings().setZoomControlsEnabled(true);
-                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-                    }
-                });
-                dialog.show();
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -5,10 +5,16 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
+import com.janice.osc.Util.ListAdapter;
 import com.janice.osc.Util.Util;
 
 import java.util.ArrayList;
@@ -31,7 +38,7 @@ import in.srain.cube.views.GridViewWithHeaderAndFooter;
 public class SodasFragment extends Fragment {
 
     private List<Soda> mSodas;
-    private GridViewWithHeaderAndFooter mGrid;
+    private ListView listView;
     private FirebaseFirestore db;
 
     public SodasFragment() {
@@ -57,7 +64,7 @@ public class SodasFragment extends Fragment {
 
     private void setItems(View view) {
         db = FirebaseFirestore.getInstance();
-        mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
+        listView = view.findViewById(R.id.list); //Obtención del grid view
         mSodas = new ArrayList<>();
     }
 
@@ -78,8 +85,8 @@ public class SodasFragment extends Fragment {
                                 sodaObtenida.setId(document.getId());
                                 mSodas.add(sodaObtenida);
                             }
-                            //Mostrar los objetos en el Grid
-                            setUpGridView(mGrid); //Inicializar el grid view
+                            //Mostrar los objetos en el List View
+                            setUpListView(listView); //Inicializar el List view
                         }
                     }
                 });
@@ -88,14 +95,16 @@ public class SodasFragment extends Fragment {
     /**
      * Infla el grid view del fragmento dependiendo de la sección
      *
-     * @param grid Instancia del grid view
+     * @param list Instancia del grid view
      */
-    private void setUpGridView(GridViewWithHeaderAndFooter grid) {
+
+    private void setUpListView(ListView list) {
+
         if(mSodas.size()>0){
-            grid.addHeaderView(createHeaderView(mSodas.get(0))); //El plato principal siempre estara en la primera posicion
-            List<Soda> sodas_sin_plato_principal = mSodas; //Siempre hay que enviar la lista sin el plato principal al Adapter
-            sodas_sin_plato_principal.remove(0);
-            grid.setAdapter(new GridAdapter<Soda>(getActivity(), sodas_sin_plato_principal, SodasFragment.this, R.layout.template_soda));
+            //List<Soda> sodas_sin_plato_principal = new ArrayList<>(mSodas); //Siempre hay que enviar la lista sin el plato principal al Adapter
+            //sodas_sin_plato_principal.remove(0);
+            list.setAdapter(new ListAdapter<Soda>(getActivity(),
+                    /*sodas_sin_plato_principal*/mSodas, SodasFragment.this, R.layout.template_soda));
         }
     }
 
@@ -115,7 +124,7 @@ public class SodasFragment extends Fragment {
 
         // Seteando Direccion
         TextView direccion = (TextView) view.findViewById(R.id.descripcion);
-        direccion.setText(String.format("Dirección: %s", item.getDireccion()));
+        direccion.setText(String.format("Dirección: %s", /*item.getDireccion()*/"Pendiente"));
 
         // Seteando Telefono
         TextView telefono = (TextView) view.findViewById(R.id.precio);
