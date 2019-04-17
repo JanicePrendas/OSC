@@ -86,8 +86,14 @@ public class ProfileSodaFragment extends Fragment {
             }
         });
 
-        ImageView MiImageView = view.findViewById(R.id.ubicacion);
-        MiImageView.setOnClickListener(new View.OnClickListener() {
+        //ImageView MiImageView = view.findViewById(R.id.ubicacion);
+        /*MiImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                muestra_dialogo_mapa();
+            }
+        });*/
+        mDireccion_edittext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 muestra_dialogo_mapa();
@@ -185,6 +191,8 @@ public class ProfileSodaFragment extends Fragment {
         mNueva_contrasena_edittext = view.findViewById(R.id.nueva_contrasena_edittext);
         db = FirebaseFirestore.getInstance();
         mActivity = (AppCompatActivity) getActivity();
+        mDireccion_edittext.setFocusable(false);
+        mDireccion_edittext.setClickable(true);
     }
 
     private void valida_contrasena() {

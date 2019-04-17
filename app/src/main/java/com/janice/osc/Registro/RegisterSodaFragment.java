@@ -77,15 +77,20 @@ public class RegisterSodaFragment extends Fragment {
                 }
             }
         });
-        ImageView MiImageView = view.findViewById(R.id.ubicacion);
-        MiImageView.setOnClickListener(new View.OnClickListener() {
+        //ImageView MiImageView = view.findViewById(R.id.ubicacion);
+        /*MiImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                muestra_dialogo_mapa();
+            }
+        });*/
+
+        mDireccion_edittext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 muestra_dialogo_mapa();
             }
         });
-
-
     }
 
     private void setItems(View view) {
@@ -99,7 +104,8 @@ public class RegisterSodaFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         mActivity = (AppCompatActivity) getActivity();
-        mDireccion_edittext.setEnabled(false);
+        mDireccion_edittext.setFocusable(false);
+        mDireccion_edittext.setClickable(true);
         mDialog = null;
         mLatitud = 0;
         mLongitud = 0;
