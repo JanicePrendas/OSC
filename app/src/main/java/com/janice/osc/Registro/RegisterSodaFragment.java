@@ -1,8 +1,6 @@
 package com.janice.osc.Registro;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,7 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,9 +29,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.R;
 import com.janice.osc.Util.Util;
@@ -213,7 +207,7 @@ public class RegisterSodaFragment extends Fragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         /////make map clear
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        dialog.setContentView(R.layout.dialogmap);////your custom content
+        dialog.setContentView(R.layout.alert_dialog_map);////your custom content
         MapView mMapView = (MapView) dialog.findViewById(R.id.mapView);
         MapsInitializer.initialize(getActivity());
 

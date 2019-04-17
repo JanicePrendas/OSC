@@ -14,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,7 +33,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.janice.osc.Customer.SodasFragment;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 
@@ -211,7 +209,7 @@ public class ProfileSodaFragment extends Fragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         /////make map clear
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        dialog.setContentView(R.layout.dialogmap);////your custom content
+        dialog.setContentView(R.layout.alert_dialog_map);////your custom content
         MapView mMapView = (MapView) dialog.findViewById(R.id.mapView);
         MapsInitializer.initialize(getActivity());
 

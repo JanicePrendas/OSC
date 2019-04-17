@@ -5,32 +5,24 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
-import com.janice.osc.Util.GridAdapter;
 import com.janice.osc.Util.ListAdapter;
 import com.janice.osc.Util.Util;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import in.srain.cube.views.GridViewWithHeaderAndFooter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +56,7 @@ public class SodasFragment extends Fragment {
 
     private void setItems(View view) {
         db = FirebaseFirestore.getInstance();
-        listView = view.findViewById(R.id.list); //Obtención del grid view
+        listView = view.findViewById(R.id.lista_sodas); //Obtención de la lista
         mSodas = new ArrayList<>();
     }
 
@@ -93,51 +85,15 @@ public class SodasFragment extends Fragment {
     }
 
     /**
-     * Infla el grid view del fragmento dependiendo de la sección
+     * Infla el list view del fragmento dependiendo de la sección
      *
-     * @param list Instancia del grid view
+     * @param list Instancia de  la lista
      */
 
     private void setUpListView(ListView list) {
-
         if(mSodas.size()>0){
-            //List<Soda> sodas_sin_plato_principal = new ArrayList<>(mSodas); //Siempre hay que enviar la lista sin el plato principal al Adapter
-            //sodas_sin_plato_principal.remove(0);
-            list.setAdapter(new ListAdapter<Soda>(getActivity(),
-                    /*sodas_sin_plato_principal*/mSodas, SodasFragment.this, R.layout.template_soda));
+            list.setAdapter(new ListAdapter<Soda>(getActivity(),mSodas, SodasFragment.this, R.layout.template_soda));
         }
-    }
-
-    /**
-     * Crea un view de cabecera para mostrarlo en el principio del grid view.
-     *
-     * @return Header View
-     */
-    private View createHeaderView(final Soda item) {
-        View view;
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        view = inflater.inflate(R.layout.template_soda, null, false);
-
-        // Seteando Nombre
-        TextView name = (TextView) view.findViewById(R.id.nombre);
-        name.setText(item.getNombre());
-
-        // Seteando Direccion
-        TextView direccion = (TextView) view.findViewById(R.id.descripcion);
-        direccion.setText(String.format("Dirección: %s", /*item.getDireccion()*/"Pendiente"));
-
-        // Seteando Telefono
-        TextView telefono = (TextView) view.findViewById(R.id.precio);
-        telefono.setText(String.format("Teléfono: %s", item.getTelefono()));
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                verSoda(item);
-            }
-        });
-
-        return view;
     }
 
     public void verSoda(Soda soda){
