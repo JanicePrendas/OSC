@@ -220,7 +220,6 @@ public class ProfileSodaFragment extends Fragment {
                 } else {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
                 }
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

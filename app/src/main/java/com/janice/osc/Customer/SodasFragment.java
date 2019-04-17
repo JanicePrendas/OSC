@@ -80,8 +80,8 @@ public class SodasFragment extends Fragment {
                                 sodaObtenida.setId(document.getId());
                                 mSodas.add(sodaObtenida);
                             }
-                            //Mostrar los objetos en el Grid
-                            setUpListView(listView); //Inicializar el grid view
+                            //Mostrar los objetos en el List View
+                            setUpListView(listView); //Inicializar el List view
                         }
                     }
                 });
@@ -96,10 +96,10 @@ public class SodasFragment extends Fragment {
     private void setUpListView(ListView list) {
 
         if(mSodas.size()>0){
-            List<Soda> sodas_sin_plato_principal = new ArrayList<>(mSodas); //Siempre hay que enviar la lista sin el plato principal al Adapter
-            sodas_sin_plato_principal.remove(0);
+            //List<Soda> sodas_sin_plato_principal = new ArrayList<>(mSodas); //Siempre hay que enviar la lista sin el plato principal al Adapter
+            //sodas_sin_plato_principal.remove(0);
             list.setAdapter(new ListAdapter<Soda>(getActivity(),
-                    sodas_sin_plato_principal, SodasFragment.this, R.layout.template_soda));
+                    /*sodas_sin_plato_principal*/mSodas, SodasFragment.this, R.layout.template_soda));
         }
     }
 

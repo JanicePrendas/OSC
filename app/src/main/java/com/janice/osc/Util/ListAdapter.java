@@ -9,7 +9,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.janice.osc.Customer.SodasFragment;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
@@ -71,7 +77,7 @@ public class ListAdapter<T> extends BaseAdapter {
 
         // Seteando Direccion
         TextView correo = (TextView) view.findViewById(R.id.correo);
-        correo.setText(String.format("Dirección: %s", /*item.getDireccion()*/"Pendiente"));
+        correo.setText(String.format("Email: %s", /*item.getDireccion()*/item.getCorreo()));
 
         // Seteando Precio
         TextView numTelefonico = (TextView) view.findViewById(R.id.telefono);
@@ -80,7 +86,7 @@ public class ListAdapter<T> extends BaseAdapter {
         // Setear el mapa
 
         MapView map = (MapView) view.findViewById(R.id.mapView2);
-        setViewMap(map);
+        setViewMap(map, position);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,10 +97,31 @@ public class ListAdapter<T> extends BaseAdapter {
 
     }
 
-    private void setViewMap(MapView map){
+    private void setViewMap(MapView mMapView, int position){
         // Aqui se setea el mapa.
+        try {
+            final Soda soda = (Soda) items.get(position);
+            MapsInitializer.initialize(mContext);
+            mMapView.onCreate(null);
+            mMapView.onResume();
+            mMapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(final GoogleMap googleMap) {
+                    if (!soda.getLatitud().equals("0") && !soda.getLongitud().equals("0")) {
+                        LatLng pos = new LatLng(Double.parseDouble(soda.getLatitud()), Double.parseDouble(soda.getLongitud()));
+                        googleMap.addMarker(new MarkerOptions().position(pos));
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+                    }
+                    googleMap.getUiSettings().setZoomControlsEnabled(true);
+                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
 
+                }
+            });
 
+        }catch(Exception ex){
+            System.out.print(ex.getMessage());
+            String a = ex.getMessage();
 
+        }
     }
 }
