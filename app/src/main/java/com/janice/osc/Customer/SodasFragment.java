@@ -5,11 +5,16 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -82,6 +87,7 @@ public class SodasFragment extends Fragment {
                             }
                             //Mostrar los objetos en el List View
                             setUpListView(listView); //Inicializar el List view
+                            registerForContextMenu(listView);
                         }
                     }
                 });
@@ -140,5 +146,30 @@ public class SodasFragment extends Fragment {
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SodaProductsFragment()).commit();
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+            MenuInflater infla =getActivity().getMenuInflater();
+            infla.inflate(R.menu.sodas_context_menu, menu);
+        
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo adp = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int opcionseleccionada = item.getItemId();
+        switch (opcionseleccionada) {
+            case R.id.itemllamar:
+                Toast.makeText(getActivity(),"Llamar", Toast.LENGTH_SHORT);
+                break;
+            case R.id.itemcorreo:
+                Toast.makeText(getActivity(),"Enviar Correo", Toast.LENGTH_SHORT);
+                break;
+            default:  Toast.makeText(getActivity(),"No clasificado", Toast.LENGTH_SHORT); break;
+        }
+
+        return true;
+    }
 
 }
