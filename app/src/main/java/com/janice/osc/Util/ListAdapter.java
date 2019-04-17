@@ -1,6 +1,5 @@
 package com.janice.osc.Util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -19,9 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.janice.osc.Customer.SodasFragment;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
-
 import java.util.List;
-import java.util.Map;
 
 public class ListAdapter<T> extends BaseAdapter {
     Context mContext;
@@ -63,7 +59,6 @@ public class ListAdapter<T> extends BaseAdapter {
         if (fragment instanceof SodasFragment)
             setViewSodas(view, position);
 
-
         return view;
     }
 
@@ -76,15 +71,14 @@ public class ListAdapter<T> extends BaseAdapter {
         name.setText(item.getNombre());
 
         // Seteando Direccion
-        TextView correo = (TextView) view.findViewById(R.id.correo);
-        correo.setText(String.format("Email: %s", /*item.getDireccion()*/item.getCorreo()));
+        //TextView correo = (TextView) view.findViewById(R.id.correo);
+        //correo.setText(String.format("Email: %s", /*item.getDireccion()*/item.getCorreo()));
 
-        // Seteando Precio
+        // Seteando Telefono
         TextView numTelefonico = (TextView) view.findViewById(R.id.telefono);
         numTelefonico.setText(String.format("Teléfono: %s", item.getTelefono()));
 
         // Setear el mapa
-
         MapView map = (MapView) view.findViewById(R.id.mapView2);
         setViewMap(map, position);
 
@@ -114,14 +108,11 @@ public class ListAdapter<T> extends BaseAdapter {
                     }
                     googleMap.getUiSettings().setZoomControlsEnabled(true);
                     googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
-
                 }
             });
-
         }catch(Exception ex){
             System.out.print(ex.getMessage());
             String a = ex.getMessage();
-
         }
     }
 }
