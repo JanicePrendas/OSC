@@ -42,7 +42,7 @@ import com.janice.osc.Util.Util;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterSodaFragment extends Fragment{
+public class RegisterSodaFragment extends Fragment {
 
     private EditText mNombre_edittext, mEmail_edittext, mTelefono_edittext, mDireccion_edittext, mContrasena_edittext, mConfirmar_contrasena_edittext;
     private Button mRegister_button, mCancelarUbic_button, mConfirmarUbic_button;
@@ -54,6 +54,7 @@ public class RegisterSodaFragment extends Fragment{
     private double mLatitud;
     private double mLongitud;
     private Dialog mDialog;
+
     public RegisterSodaFragment() {
         // Required empty public constructor
     }
@@ -76,15 +77,11 @@ public class RegisterSodaFragment extends Fragment{
                 }
             }
         });
-        ImageView MiImageView = (ImageView) view.findViewById(R.id.ubicacion);
-        MiImageView.setOnClickListener(new View.OnClickListener()
-        {
+        ImageView MiImageView = view.findViewById(R.id.ubicacion);
+        MiImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 muestra_dialogo_mapa();
-
-                // lo que desea que haga
             }
         });
 
@@ -149,8 +146,8 @@ public class RegisterSodaFragment extends Fragment{
                             //Ahora creamos el objeto soda con sus atributos
                             Map<String, Object> nueva_soda = new HashMap<>();
                             nueva_soda.put("nombre", mNombre_edittext.getText().toString());
-                            nueva_soda.put("latitud", mLatitud);
-                            nueva_soda.put("longitud", mLongitud);
+                            nueva_soda.put("latitud", mLatitud+"");
+                            nueva_soda.put("longitud", mLongitud+"");
                             nueva_soda.put("telefono", mTelefono_edittext.getText().toString());
                             nueva_soda.put("tipo", "soda");
 
@@ -159,15 +156,17 @@ public class RegisterSodaFragment extends Fragment{
                                     .set(nueva_soda)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onSuccess(Void aVoid) {}
+                                        public void onSuccess(Void aVoid) {
+                                        }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
-                                        public void onFailure(@NonNull Exception e) {}
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
                                     });
                             Util.updateUI(user, mActivity);
                         } else {
-                            Toast.makeText(mActivity, "Registration failed.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mActivity, "Registration failed: " + task.getException(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -201,7 +200,8 @@ public class RegisterSodaFragment extends Fragment{
             }
         }
     }
-    private void muestra_dialogo_mapa(){
+
+    private void muestra_dialogo_mapa() {
         final Dialog dialog = new Dialog(getActivity());
         mDialog = dialog;
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -217,18 +217,18 @@ public class RegisterSodaFragment extends Fragment{
             @Override
             public void onMapReady(final GoogleMap googleMap) {
                 LatLng posisiabsen = new LatLng(9.998301, -84.117022); ////your lat lng
-                if (mLatitud!=0 && mLongitud!=0){
+                if (mLatitud != 0 && mLongitud != 0) {
                     LatLng pos = new LatLng(mLatitud, mLongitud);
-                googleMap.addMarker(new MarkerOptions().position(pos));
+                    googleMap.addMarker(new MarkerOptions().position(pos));
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
-                }else{
+                } else {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
                 }
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
-                    public void onMapClick(LatLng point){
+                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    public void onMapClick(LatLng point) {
                         googleMap.clear();
                         googleMap.addMarker(new MarkerOptions().position(point));
                         mLatitud = point.latitude;
@@ -242,12 +242,11 @@ public class RegisterSodaFragment extends Fragment{
         mConfirmarUbic_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mLatitud!= 0 && mLongitud!=0) {
-                    mDireccion_edittext.setText(mLatitud+","+mLongitud);
+                if (mLatitud != 0 && mLongitud != 0) {
+                    mDireccion_edittext.setText("Ubicación Confirmada");
                     dialog.dismiss();
-                }
-                else{
-                    Toast.makeText(getActivity(),"Debe seleccionar una ubicación",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Debe seleccionar una ubicación", Toast.LENGTH_SHORT).show();
                 }
             }
         });
