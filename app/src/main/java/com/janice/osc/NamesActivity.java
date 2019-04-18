@@ -16,8 +16,11 @@ public class NamesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_names);
 
-        TextView textView = findViewById(R.id.names_text_view);
+        //Para habilitar flecha back
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        TextView textView = findViewById(R.id.names_text_view);
         InputStream miarchivo = getResources().openRawResource(R.raw.names);
         String html = Util.DeInputStreamAString(miarchivo);
 
@@ -26,5 +29,11 @@ public class NamesActivity extends AppCompatActivity {
         } else {
             textView.setText(Html.fromHtml(html));
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() { //Para que funciona flecha back en el toolbar
+        onBackPressed();
+        return true;
     }
 }
