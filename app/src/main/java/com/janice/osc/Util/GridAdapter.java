@@ -101,7 +101,7 @@ public class GridAdapter<T> extends BaseAdapter {
             Glide.with(image.getContext()).load(item.getImg()).into(image);
 
         // Seteando Titulo
-        TextView name = (TextView) view.findViewById(R.id.descripcion);
+        TextView name = (TextView) view.findViewById(R.id.titulo);
         name.setText(item.getTitulo());
 
         // Seteando Descripción
@@ -111,18 +111,21 @@ public class GridAdapter<T> extends BaseAdapter {
         // Seteando Precio
         TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
+
+        //TODO: Faltar agregar un switch para que el usuario escoja si quiere el producto activo o inactivo
+
         if (setListener) {
-            view.setOnClickListener(new View.OnClickListener() {
+            view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View arg0) {
+                public boolean onLongClick(View v) {
                     showMenuProductos((Producto) getItem(position));
+                    return true;
                 }
             });
         }
     }
 
     private void showMenuProductos(final Producto producto) {
-
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -135,11 +138,10 @@ public class GridAdapter<T> extends BaseAdapter {
 
         final AlertDialog alert = builder.create();
 
-
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toast.makeText(mContext, "Hay que editar", Toast.LENGTH_LONG).show();
+                ((ProductsFragment) fragment).sendToEditarProductoActivity(producto);
             }
         });
 
@@ -150,7 +152,6 @@ public class GridAdapter<T> extends BaseAdapter {
                 alert.dismiss();
             }
         });
-
 
         alert.show();
     }

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,6 +42,8 @@ public class AgregarProductoActivity extends AppCompatActivity {
     private ImageView mAdd_product_imageview;
     private Producto producto;
     private String sodaID;
+    private String id_ultimo_producto;
+    private int accion = Values.AGREGAR;
     private Uri uriImagenSeleccionada = null;
     private FirebaseFirestore db;
     private StorageReference mStorageRef;
@@ -51,12 +54,13 @@ public class AgregarProductoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_producto);
         setItems();
-        setViewListeners();
         cargarDatos();
+        setViewListeners();
+        escogerTitulo();
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp() { //Para que funciona flecha back en el toolbar
         onBackPressed();
         return true;
     }
@@ -76,13 +80,29 @@ public class AgregarProductoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    private void setViewListeners() {
-        mAdd_product_imageview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFileChooser();
+    private void cargarDatos() {
+        sodaID = getIntent().getStringExtra("sodaID");
+        id_ultimo_producto = getIntent().getStringExtra("id_ultimo_producto");
+
+        Bundle objetoRecibido = getIntent().getExtras();
+        if (objetoRecibido != null) {
+            if(objetoRecibido.getSerializable("producto_para_editar") != null){
+                accion = Values.EDITAR;
+                producto = (Producto) objetoRecibido.getSerializable("producto_para_editar");
+                setDatosDelProductoAEditar();
             }
-        });
+        }
+    }
+
+    private void setViewListeners() {
+        if(accion == Values.AGREGAR){ //Solo puede cargar una imagen para productos nuevos. Al editar, no puede cambiar la imagen
+            mAdd_product_imageview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openFileChooser();
+                }
+            });
+        }
         mBtnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,9 +111,25 @@ public class AgregarProductoActivity extends AppCompatActivity {
         });
     }
 
-    private void cargarDatos() {
-        sodaID = getIntent().getStringExtra("sodaID");
-        setTitle("Agregar Producto");
+    private void setDatosDelProductoAEditar(){
+        mEtTitulo.setText(producto.getTitulo());
+        mEtDescripcion.setText(producto.getDescripcion());
+        mEtPrecio.setText(String.valueOf(producto.getPrecio()));
+        uriImagenSeleccionada = Uri.parse(producto.getImg());
+        Glide.with(mAdd_product_imageview.getContext()).load(producto.getImg()).into(mAdd_product_imageview);
+    }
+
+    private void escogerTitulo(){
+        if(accion==Values.AGREGAR){
+            setTitle("Agregar Producto");
+            if(id_ultimo_producto.equals("-1"))
+                setTitle("Agregar Plato Principal");
+        }
+        else{
+            setTitle("Editar Producto");
+            if(producto.getId().equals("0"))
+                setTitle("Editar Plato Principal");
+        }
     }
 
     private void openFileChooser() {
@@ -149,7 +185,10 @@ public class AgregarProductoActivity extends AppCompatActivity {
                 focusView.requestFocus(); //Mostrar errores
             }
         } else {
-            subirImagen();
+            if(accion == Values.AGREGAR) //Si es un nuevo producto, debe subir una nueva imagen
+                subirImagen();
+            else //Si va a editar un producto, no puede cambiar la imagen
+                guardarProducto(producto.getImg());
         }
     }
 
@@ -160,45 +199,21 @@ public class AgregarProductoActivity extends AppCompatActivity {
         producto.setImg(imagen_url);
         producto.setEstado(Values.ACTIVO);
         producto.setPrecio(Long.parseLong(mEtPrecio.getText().toString()));
-        producto.setId("");
-        crearProducto(producto);
+        if(accion == Values.AGREGAR) //Solo se setea el id cuando es un nuevo producto
+            producto.setId(String.valueOf(Integer.valueOf(id_ultimo_producto)+1));
+        setProducto(producto);
     }
 
-    private void crearProducto(Producto producto){
-        //Creamos nuevo documento dentro de la subcoleccion productos de la soda
+    private void setProducto(Producto p){
+        //Creamos nuevo documento dentro de la subcoleccion productos de la soda (Si ya existe, le cae encima)
         db.collection("usuarios").document(sodaID)
-                .collection("productos")
-                .add(producto)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        setIdProducto(documentReference);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AgregarProductoActivity.this, R.string.error_add_product, Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
-
-    private void setIdProducto(DocumentReference productoRef){
-        productoRef
-                .update("id", productoRef.getId())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(AgregarProductoActivity.this, R.string.product_added, Toast.LENGTH_LONG).show();
-                        sendToHomeSoda(); //Regresar a Home
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //Log.w(TAG, "Error updating document", e);
-                    }
-                });
+                .collection("productos").document(producto.getId())
+                .set(p);
+        if(accion == Values.AGREGAR)
+            Toast.makeText(AgregarProductoActivity.this, R.string.product_added, Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(AgregarProductoActivity.this, R.string.product_updated, Toast.LENGTH_LONG).show();
+        sendToHomeSoda();
     }
 
     private String getFileExtension(Uri uri) {

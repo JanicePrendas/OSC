@@ -1,6 +1,8 @@
 package com.janice.osc.Model;
 
-public class Producto {
+import java.io.Serializable;
+
+public class Producto implements Serializable {
 
     private String titulo;
     private String descripcion;

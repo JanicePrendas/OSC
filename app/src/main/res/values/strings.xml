@@ -43,6 +43,7 @@
     <string name="pedidos">Pedidos</string>
     <string name="error_add_product">Error al agregar producto</string>
     <string name="product_added">Producto agregado</string>
+    <string name="product_updated">Producto actualizado</string>
 
     <!--Strings Soda-->
     <string name="sodas">Sodas</string>

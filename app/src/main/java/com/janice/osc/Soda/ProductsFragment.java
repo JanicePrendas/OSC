@@ -1,5 +1,7 @@
 package com.janice.osc.Soda;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -43,6 +45,7 @@ public class ProductsFragment extends Fragment {
 
     private FloatingActionButton mfloatAB;
     private Spinner mSpinnerVer;
+    private boolean ya_hay_plato_principal;
     private List<Producto> mProductos;
     private GridViewWithHeaderAndFooter mGrid;
     private FirebaseUser mUser;
@@ -58,8 +61,8 @@ public class ProductsFragment extends Fragment {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Fijar verticalmente
         setItems(view);
         CargarSpinner();
-        setListeners();
         cargarProductos();
+        setListeners();
         return view;
     }
 
@@ -107,8 +110,6 @@ public class ProductsFragment extends Fragment {
 
     private void cargarProductos() {
         mProductos = new ArrayList<>(); //Resetear lista de productos para volverla a cargar desde 0
-        //TODO: Luego reemplazar este plato principal quemado por uno de a deveras :v
-        mProductos.add(new Producto("Plato del Dia", "Casado con carne", "", Values.ACTIVO, (long) 3500, "A_Plato del dia"));
         db.collection("usuarios").document(mUser.getUid())//De la soda actual...
                 .collection("productos") //Traigame los productos...
                 .get() //Vamos al get de una vez (sin el where) porque quiero todos los productos de la soda
@@ -119,6 +120,7 @@ public class ProductsFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 mProductos.add(document.toObject(Producto.class));
                             }
+
                             //Mostrar los objetos en el Grid
                             setUpGridView(mGrid); //Inicializar el grid view
                         }
@@ -145,7 +147,7 @@ public class ProductsFragment extends Fragment {
      *
      * @return Header View
      */
-    private View createHeaderView(Producto item) {
+    private View createHeaderView(final Producto item) {
         View view;
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.template_plato_del_dia, null, false);
@@ -167,12 +169,52 @@ public class ProductsFragment extends Fragment {
         TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showMenuPlatoPrincipal(item);
+                return true;
+            }
+        });
+
         return view;
+    }
+
+    private void showMenuPlatoPrincipal(final Producto producto) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View viewAux = inflater.inflate(R.layout.alert_dialog_edit, null);
+        builder.setView(viewAux);
+
+        TextView edit = viewAux.findViewById(R.id.edit);//atributo de la vista del AlertDialog.Builder
+
+        final AlertDialog alert = builder.create();
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                sendToEditarProductoActivity(producto);
+            }
+        });
+        alert.show();
     }
 
     private void sendToAgregarProductoActivity() {
         Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
         intent.putExtra("sodaID", mUser.getUid());
+        if(mProductos.isEmpty())
+            intent.putExtra("id_ultimo_producto", "-1");
+        else
+            intent.putExtra("id_ultimo_producto", mProductos.get(mProductos.size() - 1).getId());
+        startActivity(intent);
+    }
+
+    public void sendToEditarProductoActivity(Producto producto) {
+        Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
+        intent.putExtra("sodaID", mUser.getUid());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("producto_para_editar",producto);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -209,6 +251,5 @@ public class ProductsFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error al borrar imagen", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 }

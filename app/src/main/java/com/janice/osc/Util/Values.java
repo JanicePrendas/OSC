@@ -5,4 +5,6 @@ public class Values {
     public static final int PICK_IMAGE_REQUEST = 1;
     public static final int ACTIVO = 1;
     public static final int INACTIVO = 0;
+    public static final int AGREGAR = 1;
+    public static final int EDITAR = 2;
 }
