@@ -98,6 +98,7 @@ public class SodasFragment extends Fragment {
 
     public void verSoda(Soda soda){
         Util.idSodaSelected = soda.getId();
+        Util.nameSodaSelected = soda.getNombre();
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SodaProductsFragment()).commit();
     }
 

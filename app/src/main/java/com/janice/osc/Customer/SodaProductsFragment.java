@@ -24,6 +24,7 @@ import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
 import com.janice.osc.Util.Util;
+import com.janice.osc.Util.Values;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,6 @@ public class SodaProductsFragment extends Fragment{
     private List<Producto> mProductos;
     private GridViewWithHeaderAndFooter mGrid;
     private String sodaId;
-    private Soda mSoda_actual;
     private FirebaseFirestore db;
 
     public SodaProductsFragment() {
@@ -57,43 +57,28 @@ public class SodaProductsFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        if(mProductos==null)
+        if(mProductos == null)
             cargarProductos();
     }
 
     private void setItems(View view) {
         db = FirebaseFirestore.getInstance();
         mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
-        mProductos = new ArrayList<>();
-        sodaId = Util.idSodaSelected;
         mNombreSoda = view.findViewById(R.id.nombre_soda);
-        setSodaActual();
-        setNombreSoda();
+        mNombreSoda.setText(Util.nameSodaSelected);
+        sodaId = Util.idSodaSelected;
+        mProductos = new ArrayList<>();
     }
 
     private void setListeners() {
 
     }
 
-    private void setSodaActual() {
-        DocumentReference docRef = db.collection("usuarios").document(sodaId);
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                mSoda_actual = documentSnapshot.toObject(Soda.class);
-            }
-        });
-    }
-
-    private void setNombreSoda() {
-        mNombreSoda.setText(mSoda_actual.getNombre());
-    }
-
     private void cargarProductos() {
         mProductos = new ArrayList<>(); //Resetear lista de productos para volverla a cargar desde 0
         db.collection("usuarios").document(sodaId)//De la soda actual...
                 .collection("productos") //Traigame los productos...
-//                .whereEqualTo("estado","activo")
+//                .whereEqualTo("estado", Values.ACTIVO)
                 .get() //Vamos al get de una vez (sin el where) porque quiero todos los productos de la soda
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

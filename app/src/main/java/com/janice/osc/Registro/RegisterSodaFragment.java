@@ -145,13 +145,14 @@ public class RegisterSodaFragment extends Fragment {
 
                             //Ahora creamos el objeto soda con sus atributos
                             Map<String, Object> nueva_soda = new HashMap<>();
+                            nueva_soda.put("id", user.getUid());
                             nueva_soda.put("nombre", mNombre_edittext.getText().toString());
                             nueva_soda.put("latitud", mLatitud+"");
                             nueva_soda.put("longitud", mLongitud+"");
                             nueva_soda.put("telefono", mTelefono_edittext.getText().toString());
                             nueva_soda.put("tipo", "soda");
 
-                            // Agregamos un nuevo documento a la colección usuarios con un ID generado automaticamente
+                            // Agregamos un nuevo documento a la colección usuarios con un ID generado automaticamente por el authentication
                             db.collection("usuarios").document(user.getUid())
                                     .set(nueva_soda)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 public class Util {
 
     public static String idSodaSelected = "";
+    public static String nameSodaSelected = "";
 
     public static void logout(final AppCompatActivity app){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(app);
