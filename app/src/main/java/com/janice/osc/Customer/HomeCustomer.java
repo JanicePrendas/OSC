@@ -111,7 +111,7 @@ public class HomeCustomer extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.verVideo:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/KWP6E9sgr70")));
                 break;
             case R.id.item_cerrar_sesion:
                 Util.logout(this);
