@@ -1,15 +1,13 @@
 package com.janice.osc;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.janice.osc.Util.Util;
-import com.squareup.picasso.Picasso;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -37,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void setItems(){
         mAuth = FirebaseAuth.getInstance();
+
     }
 
     private boolean isAutenticated(){

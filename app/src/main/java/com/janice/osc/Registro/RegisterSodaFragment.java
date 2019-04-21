@@ -1,8 +1,18 @@
 package com.janice.osc.Registro;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -48,7 +58,7 @@ public class RegisterSodaFragment extends Fragment {
     private double mLatitud;
     private double mLongitud;
     private Dialog mDialog;
-
+    LocationManager locationManager;
     public RegisterSodaFragment() {
         // Required empty public constructor
     }
@@ -109,6 +119,13 @@ public class RegisterSodaFragment extends Fragment {
                 muestra_dialogo_mapa();
             }
         });
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            alertaNoGps();
+
+        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            getUbicacion();
+        }
     }
 
     private boolean validate() {
@@ -225,9 +242,8 @@ public class RegisterSodaFragment extends Fragment {
                 } else {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
                 }
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(posisiabsen));
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
+                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     public void onMapClick(LatLng point) {
                         googleMap.clear();
@@ -259,5 +275,51 @@ public class RegisterSodaFragment extends Fragment {
         });
         dialog.show();
 
+    }
+
+    private void getUbicacion() {
+        if (ActivityCompat.checkSelfPermission(mActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (mActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location2 = locationManager.getLastKnownLocation(LocationManager. PASSIVE_PROVIDER);
+
+            if (location != null) {
+                setLatitudyLongitud(location.getLatitude(),location.getLongitude());
+            } else  if (location1 != null) {
+                setLatitudyLongitud(location1.getLatitude(),location1.getLongitude());
+
+            } else  if (location2 != null) {
+                setLatitudyLongitud(location2.getLatitude(),location2.getLongitude());
+            }else{ //No se encontro la ubicacion de ninguna forma...
+                setLatitudyLongitud(0,0);
+                Toast.makeText(getActivity(), "No se logró obtener la ubicación actual", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    protected void alertaNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setMessage("Por favor activa el GPS")
+                .setCancelable(false)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+    private void setLatitudyLongitud(double lat, double lang){
+        mLatitud = lat;
+        mLongitud = lang;
     }
 }
