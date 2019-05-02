@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.janice.osc.Customer.HomeCustomer;
 import com.janice.osc.LoginActivity;
+import com.janice.osc.R;
 import com.janice.osc.Soda.HomeSoda;
 
 import java.io.BufferedReader;
@@ -30,7 +31,7 @@ public class Util {
 
     public static void logout(final AppCompatActivity app){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(app);
-        builder1.setMessage("Estás seguro de cerrar sesión?");
+        builder1.setMessage(R.string.logout);
         builder1.setCancelable(true);
         builder1.setPositiveButton("Sí",
                 new DialogInterface.OnClickListener() {
@@ -45,9 +46,6 @@ public class Util {
                     public void onClick(DialogInterface dialog, int id) {} });
         AlertDialog alert11 = builder1.create();
         alert11.show();
-
-
-
     }
 
     public static void updateUI(FirebaseUser user, final AppCompatActivity activity) {

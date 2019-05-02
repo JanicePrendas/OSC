@@ -8,16 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import com.travijuu.numberpicker.library.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.janice.osc.Customer.SodaProductsFragment;
-import com.janice.osc.Customer.SodasFragment;
 import com.janice.osc.Model.Producto;
-import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import com.janice.osc.Soda.ProductsFragment;
+import com.travijuu.numberpicker.library.Enums.ActionEnum;
+import com.travijuu.numberpicker.library.Interface.ValueChangedListener;
 
 import java.util.List;
 
@@ -60,39 +61,13 @@ public class GridAdapter<T> extends BaseAdapter {
         }
 
         if (fragment instanceof ProductsFragment)
-            setViewProductos(view, position, true);
-        else if (fragment instanceof SodasFragment)
-            setViewSodas(view, position);
+            setViewSodasProductos(view, position, true);
         else if (fragment instanceof SodaProductsFragment)
-            setViewProductos(view, position, false);
+            setViewCustomerProductos(view, position, false);
         return view;
     }
 
-    public void setViewSodas(View view, final int position) {
-        final Soda item = (Soda) getItem(position);
-
-        // Seteando Nombre
-        TextView name = (TextView) view.findViewById(R.id.nombre);
-        name.setText(item.getNombre());
-
-        // Seteando Direccion
-        TextView direccion = (TextView) view.findViewById(R.id.descripcion);
-        direccion.setText(String.format("Dirección: %s", /*item.getDireccion()*/"Pendiente"));
-
-        // Seteando Precio
-        TextView precio = (TextView) view.findViewById(R.id.precio);
-        precio.setText(String.format("Teléfono: %s", item.getTelefono()));
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                ((SodasFragment) fragment).verSoda(item);
-            }
-        });
-
-    }
-
-    public void setViewProductos(View view, final int position, boolean setListener) {
+    public void setViewCustomerProductos(View view, final int position, boolean setListener) {
         final Producto item = (Producto) getItem(position);
 
         //Seteando Imagen
@@ -112,7 +87,37 @@ public class GridAdapter<T> extends BaseAdapter {
         TextView precio = (TextView) view.findViewById(R.id.precio);
         precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
-        //TODO: Faltar agregar un switch para que el usuario escoja si quiere el producto activo o inactivo
+        // Setear NumberPicker
+        final NumberPicker numberPicker = view.findViewById(R.id.number_picker);
+        numberPicker.setValue(0); //Por default, siempre comienza en 0...
+        numberPicker.setValueChangedListener(new ValueChangedListener() {
+            @Override
+            public void valueChanged(int value, ActionEnum action) {
+                int incremento = (action == ActionEnum.INCREMENT) ? 1: -1;
+                ((SodaProductsFragment) fragment).agregarAlPedido(item.getId(), numberPicker.getValue(),incremento);
+            }
+        });
+    }
+
+    public void setViewSodasProductos(View view, final int position, boolean setListener) {
+        final Producto item = (Producto) getItem(position);
+
+        //Seteando Imagen
+        ImageView image = (ImageView) view.findViewById(R.id.imagen);
+        if (!item.getImg().equals("")) //Solo seteamos una imagen si el objeto trae una. Si no trae ninguna, se queda con la imagen default del layout
+            Glide.with(image.getContext()).load(item.getImg()).into(image);
+
+        // Seteando Titulo
+        TextView name = (TextView) view.findViewById(R.id.titulo);
+        name.setText(item.getTitulo());
+
+        // Seteando Descripción
+        TextView descripcion = (TextView) view.findViewById(R.id.descripcion);
+        descripcion.setText(item.getDescripcion());
+
+        // Seteando Precio
+        TextView precio = (TextView) view.findViewById(R.id.precio);
+        precio.setText(String.format("₡ %s", item.getPrecio().toString()));
 
         if (setListener) {
             view.setOnLongClickListener(new View.OnLongClickListener() {

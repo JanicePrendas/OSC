@@ -10,6 +10,10 @@
     <string name="uploading">Subiendo archivo…</string>
     <string name="error">Error</string>
     <string name="cancel">Cancelar</string>
+    <string name="logout">¿Estás seguro de que deseas cerrar sesión?</string>
+
+    <!-- Splash Screen -->
+    <string name="splash">Ordene su comida</string>
 
     <!--Strings del Login-->
     <string name="welcome_app">Bienvenido a \nOrdene Su Comida</string>
@@ -30,6 +34,11 @@
     <string name="confirmar_ubic">Confirmar</string>
     <string name="cancelar_ubic">Cancelar</string>
 
+    <!--Strings de Menu-->
+    <string name="acerca_de">Acerca de</string>
+    <string name="verVideo">Ver video</string>
+    <string name="cerrarSesion">Cerrar Sesión</string>
+
     <!--Strings de los Productos-->
     <string name="plato_del_dia">Plato del Día</string>
     <string name="productos">Productos</string>
@@ -38,12 +47,14 @@
     <string name="precio">Precio</string>
     <string name="edit">Editar</string>
     <string name="delete">Borrar</string>
-
-    <!--Strings de los Pedidos-->
-    <string name="pedidos">Pedidos</string>
     <string name="error_add_product">Error al agregar producto</string>
     <string name="product_added">Producto agregado</string>
     <string name="product_updated">Producto actualizado</string>
+    <string name="activate_product">Producto disponible para hoy&#160;</string>
+
+    <!--Strings de los Pedidos-->
+    <string name="pedidos">Pedidos</string>
+    <string name="order">Ordenar</string>
 
     <!--Strings Soda-->
     <string name="sodas">Sodas</string>
@@ -55,14 +66,7 @@
     <string name="update_data">Actualizar</string>
     <string name="contrasena_anterior">Contraseña Actual</string>
     <string name="nueva_contrasena">Contraseña nueva (opcional)</string>
-    <string name="acerca_de">Acerca de</string>
     <string name="Nombre_soda">Nombre Soda</string>
-    <string name="verVideo">Ver video</string>
-    <string name="cerrarSesion">Cerrar Sesión</string>
     <string name="title_activity_maps">Map</string>
-
-    <!-- Splash Screen -->
-
-    <string name="splash">Ordene su comida</string>
 
 </resources>

@@ -33,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 import com.janice.osc.Model.Producto;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
-import com.janice.osc.Util.Values;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +137,7 @@ public class ProductsFragment extends Fragment {
             grid.addHeaderView(createHeaderView(mProductos.get(0))); //El plato principal siempre estara en la primera posicion
             List<Producto> productos_sin_plato_principal = new ArrayList<>(mProductos); //Siempre hay que enviar la lista sin el plato principal al Adapter
             productos_sin_plato_principal.remove(0);
-            grid.setAdapter(new GridAdapter<Producto>(getActivity(), productos_sin_plato_principal, ProductsFragment.this, R.layout.template_ingrediente));
+            grid.setAdapter(new GridAdapter<Producto>(getActivity(), productos_sin_plato_principal, ProductsFragment.this, R.layout.template_ingrediente_soda));
         }
     }
 
