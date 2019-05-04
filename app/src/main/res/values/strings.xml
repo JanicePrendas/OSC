@@ -52,9 +52,14 @@
     <string name="product_updated">Producto actualizado</string>
     <string name="activate_product">Producto disponible para hoy&#160;</string>
 
+    <!--Strings de la Orden-->
+    <string name="order">Ordenar</string>
+    <string name="your_order">Tu Orden</string>
+    <string name="cash">Efectivo</string>
+    <string name="total">Total</string>
+
     <!--Strings de los Pedidos-->
     <string name="pedidos">Pedidos</string>
-    <string name="order">Ordenar</string>
 
     <!--Strings Soda-->
     <string name="sodas">Sodas</string>
