@@ -7,29 +7,30 @@ public class Producto implements Serializable {
     private String titulo;
     private String descripcion;
     private String img;
-    private int estado; //1: Activo, 0: Inactivo
+    private int estado_cantidad; //Para estado_cantidad --> 1: Activo, 0: Inactivo, Para cantidad --> Numero mayor a 0
     private Long precio;
     private String id;
-/*
-    public Producto(String titulo, String descripcion, String img, int estado, Long precio) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.img = img;
-        this.estado = estado;
-        this.precio = precio;
-    }
-*/
+
     public Producto() {
 
     }
 
-    public Producto(String titulo, String descripcion, String img, int estado, Long precio, String id) {
+    public Producto(String titulo, String descripcion, String img, int estado_cantidad, Long precio, String id) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.img = img;
-        this.estado = estado;
+        this.estado_cantidad = estado_cantidad;
         this.precio = precio;
         this.id = id;
+    }
+
+    public Producto(Producto producto_a_copiar, int cantidad) {
+        this.titulo = producto_a_copiar.getTitulo();
+        this.descripcion = producto_a_copiar.getDescripcion();
+        this.img = producto_a_copiar.getImg();
+        this.estado_cantidad = cantidad;
+        this.precio = producto_a_copiar.getPrecio();
+        this.id = producto_a_copiar.getId();
     }
 
     public String getId() {
@@ -40,12 +41,12 @@ public class Producto implements Serializable {
         this.id = id;
     }
 
-    public int getEstado() {
-        return estado;
+    public int getEstado_cantidad() {
+        return estado_cantidad;
     }
 
-    public void setEstado(int estado) {
-        this.estado = estado;
+    public void setEstado_cantidad(int estado_cantidad) {
+        this.estado_cantidad = estado_cantidad;
     }
 
     public String getTitulo() {

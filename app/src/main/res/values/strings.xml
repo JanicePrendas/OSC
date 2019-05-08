@@ -11,6 +11,7 @@
     <string name="error">Error</string>
     <string name="cancel">Cancelar</string>
     <string name="logout">¿Estás seguro de que deseas cerrar sesión?</string>
+    <string name="simbolo_colones">₡</string>
 
     <!-- Splash Screen -->
     <string name="splash">Ordene su comida</string>

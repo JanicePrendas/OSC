@@ -93,8 +93,14 @@ public class GridAdapter<T> extends BaseAdapter {
         numberPicker.setValueChangedListener(new ValueChangedListener() {
             @Override
             public void valueChanged(int value, ActionEnum action) {
-                int incremento = (action == ActionEnum.INCREMENT) ? 1: -1;
-                ((SodaProductsFragment) fragment).agregarAlPedido(item.getId(), numberPicker.getValue(),incremento);
+                //int incremento = (action == ActionEnum.INCREMENT) ? 1: -1;
+                //((SodaProductsFragment) fragment).agregarAlPedido(item, numberPicker.getValue(),incremento);
+                if(action == ActionEnum.INCREMENT){
+                    ((SodaProductsFragment) fragment).agregarAlPedido(item, numberPicker.getValue());
+                }
+                else{
+                    ((SodaProductsFragment) fragment).removerDelPedido(item, numberPicker.getValue());
+                }
             }
         });
     }

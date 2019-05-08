@@ -14,7 +14,9 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.janice.osc.Customer.SodaProductsFragment;
 import com.janice.osc.Customer.SodasFragment;
+import com.janice.osc.Model.Producto;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
 import java.util.List;
@@ -58,6 +60,8 @@ public class ListAdapter<T> extends BaseAdapter {
 
         if (fragment instanceof SodasFragment)
             setViewSodas(view, position);
+        else if(fragment instanceof SodaProductsFragment)
+            setViewSodaProducts(view, position);
 
         return view;
     }
@@ -89,6 +93,27 @@ public class ListAdapter<T> extends BaseAdapter {
             }
         });
 
+    }
+
+    private void setViewSodaProducts(View view, int position){
+        final Producto item = (Producto) getItem(position);
+        int item_cantidad = item.getEstado_cantidad();
+
+        // Seteando Cantidad
+        TextView cantidad = (TextView) view.findViewById(R.id.cantidad);
+        cantidad.setText(String.format("%d%s",item_cantidad,"x"));
+
+        // Seteando Titulo
+        TextView titulo = (TextView) view.findViewById(R.id.titulo);
+        titulo.setText(item.getTitulo());
+
+        // Seteando Precio
+        TextView precio = (TextView) view.findViewById(R.id.precio);
+        precio.setText(String.format("%s%d",mContext.getString(R.string.simbolo_colones),item.getPrecio()*item_cantidad));
+
+        // Seteando Descripcion
+        TextView descripcion = (TextView) view.findViewById(R.id.descripcion);
+        descripcion.setText(item.getDescripcion());
     }
 
     private void setViewMap(MapView mMapView, int position){
