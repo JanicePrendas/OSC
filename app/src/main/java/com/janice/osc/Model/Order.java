@@ -5,23 +5,29 @@ import java.util.List;
 
 public class Order {
 
-    private String estado;
+    private String sodaId;
+    private String customerId;
+    private int estado;
     private List<Producto> productos;
+    private long total;
 
-    public Order(String estado, List<Producto> productos) {
+    public Order(String sodaId, String customerId, int estado, List<Producto> productos, long total) {
+        this.sodaId = sodaId;
+        this.customerId = customerId;
         this.estado = estado;
         this.productos = productos;
+        this.total = total;
     }
 
     public Order(){
         this.productos = new ArrayList<>();
     }
 
-    public String getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
@@ -31,5 +37,29 @@ public class Order {
 
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
+    }
+
+    public String getSodaId() {
+        return sodaId;
+    }
+
+    public void setSodaId(String sodaId) {
+        this.sodaId = sodaId;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
     }
 }

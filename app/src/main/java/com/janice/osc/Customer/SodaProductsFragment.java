@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.janice.osc.Model.Order;
 import com.janice.osc.Util.ListAdapter;
 import com.travijuu.numberpicker.library.Enums.ActionEnum;
 import com.travijuu.numberpicker.library.Interface.ValueChangedListener;
@@ -19,6 +24,7 @@ import com.travijuu.numberpicker.library.NumberPicker;
 
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,6 +56,7 @@ public class SodaProductsFragment extends Fragment {
     private int monto_total = 0;
     private List<Producto> orden;
     private FirebaseFirestore db;
+    private AlertDialog recibo;
 
     public SodaProductsFragment() {
         // Required empty public constructor
@@ -243,7 +250,7 @@ public class SodaProductsFragment extends Fragment {
         total.setText(String.format("%s %d", getString(R.string.simbolo_colones), monto_total));
         setUpListViewDelPedido(lista_productos_pedido);
 
-        final AlertDialog alert = builder.create();
+        recibo = builder.create();
 
         confirm_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,11 +261,11 @@ public class SodaProductsFragment extends Fragment {
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                alert.dismiss();
+                recibo.dismiss();
             }
         });
 
-        alert.show();
+        recibo.show();
     }
 
     /**
@@ -274,6 +281,22 @@ public class SodaProductsFragment extends Fragment {
     }
 
     private void confirmarOrden() {
-
+        String customerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Order nueva_orden = new Order(sodaId, customerId, Values.PENDIENTE ,orden, monto_total);
+        db.collection("ordenes").add(nueva_orden) //Guardar en la BD
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getActivity(), "Orden realizada con éxito", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Error al ordenar", Toast.LENGTH_LONG).show();
+                    }
+                });
+        recibo.dismiss(); //Cerrar recibo
     }
+
 }
