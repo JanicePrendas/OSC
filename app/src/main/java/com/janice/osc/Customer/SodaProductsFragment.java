@@ -180,7 +180,7 @@ public class SodaProductsFragment extends Fragment {
         mOrdenarButton.setEnabled(total_prod > 0); //Habilitamos el boton de ordenar porque el cliente ya ordeno algo
         orden.add(new Producto(producto_escogido, cantidad));*/
 
-
+        boolean es_nuevo = true;
         total_prod++;
         mOrdenarButton.setEnabled(total_prod > 0); //Habilitamos el boton de ordenar cuando el cliente ya ordeno algo
         monto_total += producto_escogido.getPrecio();
@@ -188,13 +188,11 @@ public class SodaProductsFragment extends Fragment {
         for(Producto p : orden) { //Recorremos la lista de ordenes para ver si este producto ya estaba...
             if(p.getId().equals(producto_escogido.getId())){
                 p.setEstado_cantidad(cantidad);
-            }
-            else{
-                orden.add(new Producto(producto_escogido, cantidad));
+                es_nuevo = false;
             }
         }
 
-        if(orden.isEmpty())
+        if(es_nuevo)
             orden.add(new Producto(producto_escogido, cantidad));
     }
 
