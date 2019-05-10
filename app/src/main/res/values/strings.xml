@@ -61,6 +61,8 @@
 
     <!--Strings de los Pedidos-->
     <string name="pedidos">Pedidos</string>
+    <string name="pending">Pendiente</string>
+    <string name="completed">Completado</string>
 
     <!--Strings Soda-->
     <string name="sodas">Sodas</string>
