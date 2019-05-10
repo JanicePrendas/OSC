@@ -6,7 +6,7 @@ public class Values {
     public static final int ACTIVO = 1;
     public static final int INACTIVO = 0;
     public static final int PENDIENTE = 0;
-    public static final int COMPLETA = 1;
+    public static final int COMPLETO = 1;
     public static final int AGREGAR = 1;
     public static final int EDITAR = 2;
 }
