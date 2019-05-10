@@ -12,6 +12,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +33,7 @@ import com.squareup.picasso.Picasso;
 public class AgregarProductoActivity extends AppCompatActivity {
 
     private EditText mEtTitulo, mEtDescripcion, mEtPrecio;
+    private Switch mSwitch_activate;
     private Button mBtnGuardar;
     private ImageView mAdd_product_imageview;
     private Producto producto;
@@ -63,6 +65,7 @@ public class AgregarProductoActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference().child("img_productos"); //Referencio a la carpeta img_productos para guardar las imagenes de productos
         producto = new Producto();
+        mSwitch_activate = findViewById(R.id.switch_activate);
         mEtTitulo = findViewById(R.id.etTitulo);
         mEtDescripcion = findViewById(R.id.etDescripcion);
         mEtPrecio = findViewById(R.id.etPrecio);
@@ -106,11 +109,14 @@ public class AgregarProductoActivity extends AppCompatActivity {
     }
 
     private void setDatosDelProductoAEditar(){
+        mSwitch_activate.setChecked(producto.getEstado_cantidad()==Values.ACTIVO);
         mEtTitulo.setText(producto.getTitulo());
         mEtDescripcion.setText(producto.getDescripcion());
         mEtPrecio.setText(String.valueOf(producto.getPrecio()));
         uriImagenSeleccionada = Uri.parse(producto.getImg());
         Glide.with(mAdd_product_imageview.getContext()).load(producto.getImg()).into(mAdd_product_imageview);
+        if (producto.getId().equals("0")) //Es el plato principal
+            mSwitch_activate.setClickable(false);
     }
 
     private void escogerTitulo(){
@@ -191,7 +197,7 @@ public class AgregarProductoActivity extends AppCompatActivity {
         producto.setTitulo(mEtTitulo.getText().toString());
         producto.setDescripcion(mEtDescripcion.getText().toString());
         producto.setImg(imagen_url);
-        producto.setEstado_cantidad(Values.ACTIVO);
+        producto.setEstado_cantidad(mSwitch_activate.isChecked() ? Values.ACTIVO : Values.INACTIVO);
         producto.setPrecio(Long.parseLong(mEtPrecio.getText().toString()));
         if(accion == Values.AGREGAR) //Solo se setea el id cuando es un nuevo producto
             producto.setId(String.valueOf(Integer.valueOf(id_ultimo_producto)+1));

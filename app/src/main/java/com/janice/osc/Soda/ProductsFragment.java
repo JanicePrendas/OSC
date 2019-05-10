@@ -33,6 +33,7 @@ import com.google.firebase.storage.StorageReference;
 import com.janice.osc.Model.Producto;
 import com.janice.osc.R;
 import com.janice.osc.Util.GridAdapter;
+import com.janice.osc.Util.Values;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class ProductsFragment extends Fragment {
     private boolean ya_hay_plato_principal;
     private List<Producto> mProductos;
     private GridViewWithHeaderAndFooter mGrid;
+    private View plato_del_dia;
     private FirebaseUser mUser;
     private FirebaseFirestore db;
 
@@ -60,7 +62,7 @@ public class ProductsFragment extends Fragment {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Fijar verticalmente
         setItems(view);
         CargarSpinner();
-        cargarProductos();
+        //cargarProductos();
         setListeners();
         return view;
     }
@@ -79,6 +81,7 @@ public class ProductsFragment extends Fragment {
         mSpinnerVer = view.findViewById(R.id.spinner_ver);
         mGrid = view.findViewById(R.id.gridview); //Obtención del grid view
         mProductos = new ArrayList<>();
+        plato_del_dia = null;
     }
 
     private void CargarSpinner() {
@@ -98,7 +101,18 @@ public class ProductsFragment extends Fragment {
         mSpinnerVer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //cambio de seleccion
+                mProductos.clear(); // Limpio la lista.
+                switch (position) {
+                    case 1:
+                        filterProducts(Values.ACTIVO);
+                        break;
+                    case 2:
+                        filterProducts(Values.INACTIVO);
+                        break;
+                    default:
+                        AllProducts();
+                        break;
+                }
             }
 
             @Override
@@ -107,24 +121,55 @@ public class ProductsFragment extends Fragment {
         });
     }
 
-    private void cargarProductos() {
-        mProductos = new ArrayList<>(); //Resetear lista de productos para volverla a cargar desde 0
-        db.collection("usuarios").document(mUser.getUid())//De la soda actual...
-                .collection("productos") //Traigame los productos...
-                .get() //Vamos al get de una vez (sin el where) porque quiero todos los productos de la soda
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                mProductos.add(document.toObject(Producto.class));
-                            }
-
-                            //Mostrar los objetos en el Grid
-                            setUpGridView(mGrid); //Inicializar el grid view
-                        }
+    private void filterProducts(final int estado) {
+        mProductos.clear(); // limpio los productos que tengo al momento.
+        db.collection("usuarios")
+                .document(mUser.getUid())
+                .collection("productos")
+                .whereEqualTo("estado_cantidad", estado)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        mProductos.add(document.toObject(Producto.class));
                     }
-                });
+                    setUpGridView(mGrid,estado==Values.INACTIVO); //Inicializar el grid view
+                }
+            }
+        });
+    }
+
+    private void AllProducts() {
+        mProductos.clear(); // limpio los productos que tengo al momento
+        db.collection("usuarios").document(mUser.getUid())
+                .collection("productos")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        mProductos.add(document.toObject(Producto.class));
+                    }
+                    setUpGridView(mGrid,false); //Inicializar el grid view
+                }
+            }
+        });
+    }
+
+    private void cargarProductos() {
+        AllProducts();
+        /*switch (mSpinnerVer.getSelectedItemPosition()) {
+            case 1:
+                filterProducts(Values.ACTIVO);
+                break;
+            case 2:
+                filterProducts(Values.INACTIVO);
+                break;
+            default:
+                AllProducts();
+                break;
+        }*/
     }
 
     /**
@@ -132,12 +177,28 @@ public class ProductsFragment extends Fragment {
      *
      * @param grid Instancia del grid view
      */
-    private void setUpGridView(GridViewWithHeaderAndFooter grid) {
+    private void setUpGridView(GridViewWithHeaderAndFooter grid, boolean solo_inactivos) {
+        //Limpiar el Header del GridView
+        if(plato_del_dia != null)
+            mGrid.removeHeaderView(plato_del_dia);
+        mGrid.setAdapter(null);
+        plato_del_dia = null;
+
         if (mProductos.size() > 0) {
-            grid.addHeaderView(createHeaderView(mProductos.get(0))); //El plato principal siempre estara en la primera posicion
-            List<Producto> productos_sin_plato_principal = new ArrayList<>(mProductos); //Siempre hay que enviar la lista sin el plato principal al Adapter
-            productos_sin_plato_principal.remove(0);
-            grid.setAdapter(new GridAdapter<Producto>(getActivity(), productos_sin_plato_principal, ProductsFragment.this, R.layout.template_ingrediente_soda));
+            if(solo_inactivos){ //Muestro todos los productos de la lista sin Header
+                grid.setAdapter(new GridAdapter<Producto>(getActivity(), mProductos, ProductsFragment.this, R.layout.template_ingrediente_soda));
+            }
+            else{ //De fijo si viene el plato principal...
+                if(plato_del_dia == null){
+                    plato_del_dia = createHeaderView(mProductos.get(0));
+                    grid.addHeaderView(plato_del_dia); //El plato principal siempre estara en la primera posicion
+                }
+
+
+                List<Producto> productos_sin_plato_principal = new ArrayList<>(mProductos); //Siempre hay que enviar la lista sin el plato principal al Adapter
+                productos_sin_plato_principal.remove(0);
+                grid.setAdapter(new GridAdapter<Producto>(getActivity(), productos_sin_plato_principal, ProductsFragment.this, R.layout.template_ingrediente_soda));
+            }
         }
     }
 
@@ -201,7 +262,7 @@ public class ProductsFragment extends Fragment {
     private void sendToAgregarProductoActivity() {
         Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
         intent.putExtra("sodaID", mUser.getUid());
-        if(mProductos.isEmpty())
+        if (mProductos.isEmpty())
             intent.putExtra("id_ultimo_producto", "-1");
         else
             intent.putExtra("id_ultimo_producto", mProductos.get(mProductos.size() - 1).getId());
@@ -212,7 +273,7 @@ public class ProductsFragment extends Fragment {
         Intent intent = new Intent(getContext(), AgregarProductoActivity.class);
         intent.putExtra("sodaID", mUser.getUid());
         Bundle bundle = new Bundle();
-        bundle.putSerializable("producto_para_editar",producto);
+        bundle.putSerializable("producto_para_editar", producto);
         intent.putExtras(bundle);
         startActivity(intent);
     }

@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.travijuu.numberpicker.library.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.janice.osc.Customer.SodaProductsFragment;
