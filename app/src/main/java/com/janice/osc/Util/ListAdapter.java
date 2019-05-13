@@ -1,7 +1,9 @@
 package com.janice.osc.Util;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +16,23 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.janice.osc.Customer.CustomerOrdersFragment;
 import com.janice.osc.Customer.SodaProductsFragment;
 import com.janice.osc.Customer.SodasFragment;
+import com.janice.osc.Model.Customer;
+import com.janice.osc.Model.Order;
 import com.janice.osc.Model.Producto;
 import com.janice.osc.Model.Soda;
 import com.janice.osc.R;
+import com.janice.osc.Soda.OrdersFragment;
+import com.janice.osc.Soda.ProductsFragment;
+
 import java.util.List;
 
 public class ListAdapter<T> extends BaseAdapter {
@@ -62,7 +76,12 @@ public class ListAdapter<T> extends BaseAdapter {
             setViewSodas(view, position);
         else if(fragment instanceof SodaProductsFragment)
             setViewSodaProducts(view, position);
-
+        else if(fragment instanceof OrdersFragment) {
+            setViewSodaOrders(view, position);
+        }
+        else if(fragment instanceof CustomerOrdersFragment){
+            setViewCustomerOrders(view, position);
+        }
         return view;
     }
 
@@ -139,5 +158,67 @@ public class ListAdapter<T> extends BaseAdapter {
             System.out.print(ex.getMessage());
             String a = ex.getMessage();
         }
+    }
+
+    private void setViewSodaOrders(final View view, int position){
+        final Order item = (Order) getItem(position);
+
+        FirebaseFirestore.getInstance().collection("usuarios").document(item.getCustomerId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Customer c = document.toObject(Customer.class);
+                                TextView tvNombre = view.findViewById(R.id.name);
+                                tvNombre.setText(c.getNombre());
+
+                                TextView tvPayment = view.findViewById(R.id.payment);
+                                tvPayment.setText("Efectivo");
+
+                                TextView tvEstado = view.findViewById(R.id.estado);
+                                tvEstado.setText(Values.valueName(item.getEstado()));
+
+                                TextView tvPrecio = view.findViewById(R.id.precio);
+                                tvPrecio.setText(item.getTotal()+"");
+                            } else {
+                                Log.d("LV ORDERS SODA", "No such document");
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void setViewCustomerOrders(final View view, int position){
+        final Order item = (Order) getItem(position);
+
+        FirebaseFirestore.getInstance().collection("usuarios").document(item.getSodaId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Soda s = document.toObject(Soda.class);
+                                TextView tvNombre = view.findViewById(R.id.name);
+                                tvNombre.setText(s.getNombre());
+
+                                TextView tvPayment = view.findViewById(R.id.payment);
+                                tvPayment.setText("Efectivo");
+
+                                TextView tvEstado = view.findViewById(R.id.estado);
+                                tvEstado.setText(Values.valueName(item.getEstado()));
+
+                                TextView tvPrecio = view.findViewById(R.id.precio);
+                                tvPrecio.setText(item.getTotal()+"");
+                            } else {
+                                Log.d("LV ORDERS SODA", "No such document");
+                            }
+                        }
+                    }
+                });
     }
 }

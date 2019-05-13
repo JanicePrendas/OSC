@@ -46,7 +46,6 @@ public class ProfileSodaFragment extends Fragment {
 
     private EditText mNombre_edittext, mEmail_edittext, mTelefono_edittext, mDireccion_edittext, mContrasena_edittext, mNueva_contrasena_edittext;
     private Button mUpdate_button, mCancelarUbic_button, mConfirmarUbic_button;
-    ;
     private AppCompatActivity mActivity;
     private FirebaseFirestore db;
     private boolean mCancel;
