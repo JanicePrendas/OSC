@@ -9,4 +9,16 @@ public class Values {
     public static final int COMPLETO = 1;
     public static final int AGREGAR = 1;
     public static final int EDITAR = 2;
+
+    public static String valueName(int estado){
+        switch (estado){
+            case 0:
+                return "Pendiente";
+            case 1:
+                return "Completo";
+
+            default:
+                return "Not a value";
+        }
+    }
 }
