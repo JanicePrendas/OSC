@@ -281,12 +281,12 @@ public class SodaProductsFragment extends Fragment {
 
     private void confirmarOrden() {
         String customerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Order nueva_orden = new Order(sodaId, customerId, Values.PENDIENTE ,orden, monto_total);
+        Order nueva_orden = new Order("",sodaId, customerId, Values.PENDIENTE ,orden, monto_total);
         db.collection("ordenes").add(nueva_orden) //Guardar en la BD
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getActivity(), "Orden realizada con éxito", Toast.LENGTH_LONG).show();
+                        actualizarIdNuevaOrden(documentReference);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -298,4 +298,20 @@ public class SodaProductsFragment extends Fragment {
         recibo.dismiss(); //Cerrar recibo
     }
 
+    private void actualizarIdNuevaOrden(DocumentReference documentReference){
+        db.collection("ordenes").document(documentReference.getId())
+                .update("id", documentReference.getId())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(), "Orden realizada con éxito", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Error al ordenar", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 }

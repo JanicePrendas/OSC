@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -42,11 +43,11 @@ public class ListAdapter<T> extends BaseAdapter {
     int layoutId;
 
 
-    public ListAdapter(Context mContext, List<T> items, Fragment fragment, int layout ) {
-       this.mContext = mContext;
-       this.fragment = fragment;
-       this.layoutId = layout;
-       this.items = items;
+    public ListAdapter(Context mContext, List<T> items, Fragment fragment, int layout) {
+        this.mContext = mContext;
+        this.fragment = fragment;
+        this.layoutId = layout;
+        this.items = items;
     }
 
     @Override
@@ -74,19 +75,18 @@ public class ListAdapter<T> extends BaseAdapter {
 
         if (fragment instanceof SodasFragment)
             setViewSodas(view, position);
-        else if(fragment instanceof SodaProductsFragment)
+        else if (fragment instanceof SodaProductsFragment || fragment==null)
             setViewSodaProducts(view, position);
-        else if(fragment instanceof OrdersFragment) {
+        else if (fragment instanceof OrdersFragment) {
             setViewSodaOrders(view, position);
-        }
-        else if(fragment instanceof CustomerOrdersFragment){
+        } else if (fragment instanceof CustomerOrdersFragment) {
             setViewCustomerOrders(view, position);
         }
         return view;
     }
 
 
-    private void setViewSodas(View view, int position){
+    private void setViewSodas(View view, int position) {
         final Soda item = (Soda) getItem(position);
 
         // Seteando Nombre
@@ -114,13 +114,13 @@ public class ListAdapter<T> extends BaseAdapter {
 
     }
 
-    private void setViewSodaProducts(View view, int position){
+    private void setViewSodaProducts(View view, int position) {
         final Producto item = (Producto) getItem(position);
         int item_cantidad = item.getEstado_cantidad();
 
         // Seteando Cantidad
         TextView cantidad = (TextView) view.findViewById(R.id.cantidad);
-        cantidad.setText(String.format("%d%s",item_cantidad,"x"));
+        cantidad.setText(String.format("%d%s", item_cantidad, "x"));
 
         // Seteando Titulo
         TextView titulo = (TextView) view.findViewById(R.id.titulo);
@@ -128,14 +128,14 @@ public class ListAdapter<T> extends BaseAdapter {
 
         // Seteando Precio
         TextView precio = (TextView) view.findViewById(R.id.precio);
-        precio.setText(String.format("%s%d",mContext.getString(R.string.simbolo_colones),item.getPrecio()*item_cantidad));
+        precio.setText(String.format("%s %d", mContext.getString(R.string.simbolo_colones), item.getPrecio() * item_cantidad));
 
         // Seteando Descripcion
         TextView descripcion = (TextView) view.findViewById(R.id.descripcion);
         descripcion.setText(item.getDescripcion());
     }
 
-    private void setViewMap(MapView mMapView, int position){
+    private void setViewMap(MapView mMapView, int position) {
         // Aqui se setea el mapa.
         try {
             final Soda soda = (Soda) items.get(position);
@@ -154,13 +154,13 @@ public class ListAdapter<T> extends BaseAdapter {
                     googleMap.animateCamera(CameraUpdateFactory.zoomTo(13), 2000, null);
                 }
             });
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.print(ex.getMessage());
             String a = ex.getMessage();
         }
     }
 
-    private void setViewSodaOrders(final View view, int position){
+    private void setViewSodaOrders(final View view, int position) {
         final Order item = (Order) getItem(position);
 
         FirebaseFirestore.getInstance().collection("usuarios").document(item.getCustomerId())
@@ -168,8 +168,8 @@ public class ListAdapter<T> extends BaseAdapter {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            DocumentSnapshot document = task.getResult();
+                        if (task.isSuccessful()) {
+                            final DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Customer c = document.toObject(Customer.class);
                                 TextView tvNombre = view.findViewById(R.id.name);
@@ -181,8 +181,19 @@ public class ListAdapter<T> extends BaseAdapter {
                                 TextView tvEstado = view.findViewById(R.id.estado);
                                 tvEstado.setText(Values.valueName(item.getEstado()));
 
+                                if(item.getEstado() == Values.COMPLETO){
+                                    tvEstado.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_green_24dp, 0);
+                                }
+
                                 TextView tvPrecio = view.findViewById(R.id.precio);
-                                tvPrecio.setText(item.getTotal()+"");
+                                tvPrecio.setText(String.format("%s %s", mContext.getString(R.string.simbolo_colones), String.valueOf(item.getTotal())));
+
+                                view.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View arg0) {
+                                        ((OrdersFragment) fragment).mostrarDetallesOrden(item);
+                                    }
+                                });
                             } else {
                                 Log.d("LV ORDERS SODA", "No such document");
                             }
@@ -191,7 +202,7 @@ public class ListAdapter<T> extends BaseAdapter {
                 });
     }
 
-    private void setViewCustomerOrders(final View view, int position){
+    private void setViewCustomerOrders(final View view, int position) {
         final Order item = (Order) getItem(position);
 
         FirebaseFirestore.getInstance().collection("usuarios").document(item.getSodaId())
@@ -199,7 +210,7 @@ public class ListAdapter<T> extends BaseAdapter {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Soda s = document.toObject(Soda.class);
@@ -212,8 +223,19 @@ public class ListAdapter<T> extends BaseAdapter {
                                 TextView tvEstado = view.findViewById(R.id.estado);
                                 tvEstado.setText(Values.valueName(item.getEstado()));
 
+                                if(item.getEstado() == Values.COMPLETO){
+                                    tvEstado.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_green_24dp, 0);
+                                }
+
                                 TextView tvPrecio = view.findViewById(R.id.precio);
-                                tvPrecio.setText(item.getTotal()+"");
+                                tvPrecio.setText(String.format("%s %s", mContext.getString(R.string.simbolo_colones), String.valueOf(item.getTotal())));
+
+                                view.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View arg0) {
+                                        ((CustomerOrdersFragment) fragment).mostrarDetallesOrden(item);
+                                    }
+                                });
                             } else {
                                 Log.d("LV ORDERS SODA", "No such document");
                             }

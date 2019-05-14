@@ -5,13 +5,15 @@ import java.util.List;
 
 public class Order {
 
+    private String id;
     private String sodaId;
     private String customerId;
     private int estado;
     private List<Producto> productos;
     private long total;
 
-    public Order(String sodaId, String customerId, int estado, List<Producto> productos, long total) {
+    public Order(String id, String sodaId, String customerId, int estado, List<Producto> productos, long total) {
+        this.id = id;
         this.sodaId = sodaId;
         this.customerId = customerId;
         this.estado = estado;
@@ -21,6 +23,14 @@ public class Order {
 
     public Order(){
         this.productos = new ArrayList<>();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getEstado() {

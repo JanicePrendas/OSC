@@ -20,12 +20,9 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/baseline_person_black_24"
-            android:drawableLeft="@drawable/baseline_person_black_24"
-            android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:text="@string/nombre"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TableRow
@@ -38,9 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:drawableStart="@drawable/cash24"
-                android:drawableLeft="@drawable/cash24"
-                android:drawablePadding="8dp"
+                android:drawableEnd="@drawable/cash24"
+                android:drawableRight="@drawable/cash24"
+                android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:text="@string/cash" />
 
@@ -48,9 +45,11 @@
                 android:id="@+id/estado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_warning_24dp"
-                android:drawableLeft="@drawable/ic_warning_24dp"
-                android:drawablePadding="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:drawableEnd="@drawable/ic_warning_24dp"
+                android:drawableRight="@drawable/ic_warning_24dp"
+                android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:text="@string/pending" />
         </TableRow>
