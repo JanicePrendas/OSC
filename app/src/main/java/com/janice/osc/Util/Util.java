@@ -78,7 +78,7 @@ public class Util {
             });
         }
         else {
-           // Toast.makeText(activity, "Not Autenticated.", Toast.LENGTH_LONG).show();
+           Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show();
         }
     }
 
