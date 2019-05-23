@@ -79,4 +79,8 @@
     <string name="Nombre_soda">Nombre Soda</string>
     <string name="title_activity_maps">Map</string>
 
+
+    <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
+    <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
+
 </resources>

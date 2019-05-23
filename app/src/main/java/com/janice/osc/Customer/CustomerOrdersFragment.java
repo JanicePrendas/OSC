@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wallet.IsReadyToPayRequest;
+import com.google.android.gms.wallet.PaymentsClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,11 +27,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.janice.osc.Model.Order;
 import com.janice.osc.Model.Producto;
+import com.janice.osc.Payment.PaymentsUtil;
 import com.janice.osc.R;
 import com.janice.osc.Util.ListAdapter;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +46,7 @@ public class CustomerOrdersFragment extends Fragment {
     private ListView listView;
     private FirebaseFirestore db;
     private final FirebaseUser userCustomer = FirebaseAuth.getInstance().getCurrentUser();
+
 
     public CustomerOrdersFragment() {
         // Required empty public constructor
@@ -63,6 +71,8 @@ public class CustomerOrdersFragment extends Fragment {
 
     private void setItems(View view) {
         db = FirebaseFirestore.getInstance();
+
+
         listView = view.findViewById(R.id.listViewOrdersCustomer); //Obtención de la lista
         mOrders = new ArrayList<>();
     }
@@ -135,4 +145,8 @@ public class CustomerOrdersFragment extends Fragment {
             list.setAdapter(new ListAdapter<Producto>(getActivity(), orden.getProductos(), null, R.layout.template_producto_pedido));
         }
     }
+
+
+
+
 }

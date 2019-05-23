@@ -16,13 +16,8 @@
 -->
 
 <resources>
-
-    <dimen name="padding_small">5dp</dimen>
-    <dimen name="margin_large">10dp</dimen>
-    <dimen name="margin_xlarge">30dp</dimen>
-
-    <dimen name="buy_button_width">300dp</dimen>
-    <dimen name="buy_button_height">48sp</dimen>
-    <dimen name="buy_button_min_width">200dp</dimen>
-
+    <string name="googlepay_button_content_description" translatable="false">Google Pay</string>
+    <string name="buy_with_googlepay_button_content_description" translatable="false">Buy with Google Pay</string>
+    <string name="save_to_googlepay_button_content_description" translatable="false">Save to Google Pay</string>
+    <string name="add_to_googlepay_button_content_description" translatable="false">Add to Google Pay</string>
 </resources>

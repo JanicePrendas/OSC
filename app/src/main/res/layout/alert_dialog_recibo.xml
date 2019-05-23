@@ -130,6 +130,23 @@
             android:text="@string/cash"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <include
+            android:id="@+id/googlepay_button"
+            layout="@layout/googlepay_button"
+            android:layout_width="@dimen/buy_button_width"
+            android:layout_height="@dimen/buy_button_height"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/googlepay_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/googlepay_status_checking" />
     </LinearLayout>
 
     <View
