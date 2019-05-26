@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,6 +110,47 @@ public class OrdersFragment extends Fragment {
     }
 
     public void mostrarDetallesOrden(final Order orden) {
+        if (orden.getEstado() == Values.COMPLETO)
+            mostrarOrdenCompleta(orden);
+        else
+            mostrarOrdenPendiente(orden);
+    }
+
+    private void mostrarOrdenCompleta(final Order orden) {
+        //Mostramos alert dialog con el recibo
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View viewAux = inflater.inflate(R.layout.alert_dialog_recibo_show, null);
+        builder.setView(viewAux);
+
+        //Atributos de la vista del AlertDialog.Builder
+        TextView order = viewAux.findViewById(R.id.order);
+        order.setText(R.string.orden);
+        ListView lista_productos_pedido = viewAux.findViewById(R.id.lista_productos_pedido);
+        TextView total = viewAux.findViewById(R.id.total);
+        ImageView icono_pago = viewAux.findViewById(R.id.icono_pago);
+        TextView tipo_de_pago = viewAux.findViewById(R.id.tipo_de_pago);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        if(/*orden.getTipoPago() == Values.GOOGLE_PAY*/false){
+            icono_pago.setImageDrawable(getActivity().getDrawable(R.drawable.googlepaymark));
+            tipo_de_pago.setText(R.string.googlepay_button_content_description);
+        }
+
+        total.setText(String.format("%s %d", getString(R.string.simbolo_colones), orden.getTotal()));
+        setUpListViewDelPedido(lista_productos_pedido, orden);
+
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void mostrarOrdenPendiente(final Order orden) {
         //Mostramos alert dialog con el recibo
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -121,18 +163,15 @@ public class OrdersFragment extends Fragment {
         order.setText(R.string.orden);
         ListView lista_productos_pedido = viewAux.findViewById(R.id.lista_productos_pedido);
         TextView total = viewAux.findViewById(R.id.total);
+        ImageView icono_pago = viewAux.findViewById(R.id.icono_pago);
+        TextView tipo_de_pago = viewAux.findViewById(R.id.tipo_de_pago);
         Button confirm_button = viewAux.findViewById(R.id.confirm_button);
         Button cancel_button = viewAux.findViewById(R.id.cancel_button);
         confirm_button.setText(R.string.complete);
 
-        if (orden.getEstado() == Values.COMPLETO) {
-            confirm_button.getLayoutParams().height = 0;
-            cancel_button.getLayoutParams().height = 0;
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
+        if(/*orden.getTipoPago() == Values.GOOGLE_PAY*/false){
+            icono_pago.setImageDrawable(getActivity().getDrawable(R.drawable.googlepaymark));
+            tipo_de_pago.setText(R.string.googlepay_button_content_description);
         }
 
         total.setText(String.format("%s %d", getString(R.string.simbolo_colones), orden.getTotal()));

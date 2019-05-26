@@ -1,6 +1,5 @@
 package com.janice.osc.Customer;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,18 +7,14 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wallet.IsReadyToPayRequest;
-import com.google.android.gms.wallet.PaymentsClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,15 +22,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.janice.osc.Model.Order;
 import com.janice.osc.Model.Producto;
-import com.janice.osc.Payment.PaymentsUtil;
 import com.janice.osc.R;
 import com.janice.osc.Util.ListAdapter;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,16 +107,19 @@ public class CustomerOrdersFragment extends Fragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View viewAux = inflater.inflate(R.layout.alert_dialog_recibo, null);
+        View viewAux = inflater.inflate(R.layout.alert_dialog_recibo_show, null);
         builder.setView(viewAux);
 
         //Atributos de la vista del AlertDialog.Builder
         ListView lista_productos_pedido = viewAux.findViewById(R.id.lista_productos_pedido);
         TextView total = viewAux.findViewById(R.id.total);
-        Button confirm_button = viewAux.findViewById(R.id.confirm_button);
-        Button cancel_button = viewAux.findViewById(R.id.cancel_button);
-        confirm_button.getLayoutParams().height = 0;
-        cancel_button.getLayoutParams().height = 0;
+        ImageView icono_pago = viewAux.findViewById(R.id.icono_pago);
+        TextView tipo_de_pago = viewAux.findViewById(R.id.tipo_de_pago);
+
+        if(/*orden.getTipoPago() == Values.GOOGLE_PAY*/false){
+            icono_pago.setImageDrawable(getActivity().getDrawable(R.drawable.googlepaymark));
+            tipo_de_pago.setText(R.string.googlepay_button_content_description);
+        }
 
         total.setText(String.format("%s %d", getString(R.string.simbolo_colones), orden.getTotal()));
         setUpListViewDelPedido(lista_productos_pedido, orden);
@@ -145,8 +138,4 @@ public class CustomerOrdersFragment extends Fragment {
             list.setAdapter(new ListAdapter<Producto>(getActivity(), orden.getProductos(), null, R.layout.template_producto_pedido));
         }
     }
-
-
-
-
 }

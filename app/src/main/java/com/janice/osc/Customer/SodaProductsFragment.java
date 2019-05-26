@@ -261,15 +261,13 @@ public class SodaProductsFragment extends Fragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View viewAux = inflater.inflate(R.layout.alert_dialog_recibo, null);
+        View viewAux = inflater.inflate(R.layout.alert_dialog_recibo_pay, null);
         builder.setView(viewAux);
 
         //Atributos de la vista del AlertDialog.Builder
         ListView lista_productos_pedido = viewAux.findViewById(R.id.lista_productos_pedido);
         TextView total = viewAux.findViewById(R.id.total);
-        Button confirm_button = viewAux.findViewById(R.id.confirm_button);
-        Button cancel_button = viewAux.findViewById(R.id.cancel_button);
-
+        Button cash_button = viewAux.findViewById(R.id.cash_button);
 
         // Initialize a Google Pay API client for an environment suitable for testing.
         // It's recommended to create the PaymentsClient object inside of the onCreate method.
@@ -290,16 +288,10 @@ public class SodaProductsFragment extends Fragment {
 
         recibo = builder.create();
 
-        confirm_button.setOnClickListener(new View.OnClickListener() {
+        cash_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 confirmarOrden();
-            }
-        });
-        cancel_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                recibo.dismiss();
             }
         });
 
@@ -320,7 +312,7 @@ public class SodaProductsFragment extends Fragment {
 
     private void confirmarOrden() {
         String customerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Order nueva_orden = new Order("",sodaId, customerId, Values.PENDIENTE ,orden, monto_total);
+        Order nueva_orden = new Order("",sodaId, customerId, Values.PENDIENTE ,orden, monto_total); //TODO Agregar EFECTIVO
         db.collection("ordenes").add(nueva_orden) //Guardar en la BD
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
