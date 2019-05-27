@@ -176,7 +176,10 @@ public class ListAdapter<T> extends BaseAdapter {
                                 tvNombre.setText(c.getNombre());
 
                                 TextView tvPayment = view.findViewById(R.id.payment);
-                                tvPayment.setText("Efectivo");
+                                if(/*item.getTipoPago() == Values.GOOGLE_PAY*/false){
+                                    tvPayment.setText(R.string.googlepay_button_content_description);
+                                    tvPayment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.googlepaymark, 0);
+                                }
 
                                 TextView tvEstado = view.findViewById(R.id.estado);
                                 tvEstado.setText(Values.valueName(item.getEstado()));
@@ -218,7 +221,10 @@ public class ListAdapter<T> extends BaseAdapter {
                                 tvNombre.setText(s.getNombre());
 
                                 TextView tvPayment = view.findViewById(R.id.payment);
-                                tvPayment.setText("Efectivo");
+                                if(/*item.getTipoPago() == Values.GOOGLE_PAY*/false){
+                                    tvPayment.setText(R.string.googlepay_button_content_description);
+                                    tvPayment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.googlepaymark, 0);
+                                }
 
                                 TextView tvEstado = view.findViewById(R.id.estado);
                                 tvEstado.setText(Values.valueName(item.getEstado()));

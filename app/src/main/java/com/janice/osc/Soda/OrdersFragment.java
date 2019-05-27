@@ -1,6 +1,5 @@
 package com.janice.osc.Soda;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,14 +15,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -31,9 +28,7 @@ import com.janice.osc.Model.Order;
 import com.janice.osc.Model.Producto;
 import com.janice.osc.R;
 import com.janice.osc.Util.ListAdapter;
-import com.janice.osc.Util.Util;
 import com.janice.osc.Util.Values;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +38,7 @@ import java.util.List;
 public class OrdersFragment extends Fragment {
 
     private List<Order> mOrders;
+    private TextView mTotal;
     private ListView listView;
     private FirebaseFirestore db;
     private final FirebaseUser userSoda = FirebaseAuth.getInstance().getCurrentUser();
@@ -70,6 +66,7 @@ public class OrdersFragment extends Fragment {
 
     private void setItems(View view) {
         db = FirebaseFirestore.getInstance();
+        mTotal = view.findViewById(R.id.total);
         listView = view.findViewById(R.id.listViewOrdersSoda); //Obtención de la lista
         mOrders = new ArrayList<>();
     }
@@ -86,10 +83,13 @@ public class OrdersFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            int cantidad = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Order pedidoObtenido = document.toObject(Order.class);
                                 mOrders.add(pedidoObtenido);
+                                cantidad += pedidoObtenido.getTotal();
                             }
+                            mTotal.setText("Ganancias Totales: ₡" + cantidad);
                             //Mostrar los objetos en el List View
                             setUpListView(listView); //Inicializar el List view
                         }
