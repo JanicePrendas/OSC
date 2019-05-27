@@ -34,9 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:drawableEnd="@drawable/cash24"
-                android:drawableRight="@drawable/cash24"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:text="@string/cash" />
@@ -46,9 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:drawableEnd="@drawable/ic_warning_24dp"
-                android:drawableRight="@drawable/ic_warning_24dp"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:text="@string/pending" />
@@ -61,7 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="@string/total"
         android:textSize="18sp"
         android:textStyle="bold" />
